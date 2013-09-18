@@ -1,0 +1,26 @@
+#boxOperacion{
+	width: 100%;
+	height: 50%;
+	margin-top: 15px;
+	background-color: silver;
+	font-size: 1.4em;
+}
+
+#boxBoton{
+	margin-top: 30px;
+}
+
+#tituloResultado{
+	margin-top: 30px;
+	text-align: center;
+	font-size: 1.3em;
+}
+
+#boxResultado{
+	width: 100%;
+	height: 50%;
+	font-size: 1.7em;
+	font-weight: bold;
+	color: blue;
+	text-align: center;
+}

@@ -1,5 +1,5 @@
 var operacion = "";
-var longMax = 15;
+var longMax = 8;
 var longAct = parseInt("0");
 var corchAb = false;
 var parAb = false;
@@ -7,6 +7,7 @@ var corchUtil = false;
 var caracUlt = parseInt("0");
 var haySigno = false;
 var hayPar = false;
+var corchIni = false;
 
 
 //EVENTOS AL INICIO
@@ -65,6 +66,7 @@ function primerCaracter() {
 		operacion += "[ ";
 		caracUlt = 1;
 		corchAb = true;
+		corchIni = true;
 	} else if (num >= 0.2 && num < 0.4){
 		operacion += "( ";
 		caracUlt = 2;
@@ -82,13 +84,23 @@ function cuerpoOperacion() {
 	while(longAct < longMax) {
 		
 		if ( (longAct + 1) == longMax && corchUtil == false && parAb == true) {
+			if (caracUlt == 2 || haySigno == false){
+				reset();
+				getOperacion();
+				return;
+			}
 			operacion += ") ";
 			caracUlt = 5;
 			parAb = false;
+			haySigno = false;
 			if (corchAb == true){
 				hayPar = true;
 				corchUtil = true;
 			}
+		} else if (corchUtil == true && haySigno == false && parAb == true) {
+		    reset();
+            getOperacion();
+            return;
 		}
 		
 		switch(caracUlt) {
@@ -118,6 +130,7 @@ function cuerpoOperacion() {
 						operacion += ") ";
 						caracUlt = 5;
 						parAb = false;
+						haySigno = false;
 						if (corchAb == true){
 							hayPar = true;
 						}
@@ -176,7 +189,7 @@ function cuerpoOperacion() {
 						caracUlt = 1;
 						corchAb = true;
 					} else if (num >= 0.2 && num < 0.4) {
-						operacion += "(";
+						operacion += "( ";
 						caracUlt = 2;
 						parAb = true;
 					} else {
@@ -219,10 +232,25 @@ function cuerpoOperacion() {
 
 function ultimoCaracter(){
 	if (parAb == true && corchAb == true){
+		if (corchIni == true || hayPar == false) {
+			reset();
+			getOperacion();
+			return;
+		}		
 		operacion += ") ]";
 	} else if (corchAb == true){
+		if (corchIni == true || hayPar == false || corchUtil == false) {
+			reset();
+			getOperacion();
+			return;
+		}
 		operacion += "]";
 	} else if (parAb == true) {
+		if (haySigno == false) {
+			reset();
+			getOperacion();
+			return;
+		}
 		operacion += ")";
 	}
 }
@@ -257,4 +285,7 @@ function reset() {
 	corchUtil = false;
 	haySigno = false;
 	hayPar = false;
+	corchIni = false;
+	$("#boxOperacion").html("");
+	$("#boxResultado").html("");
 }

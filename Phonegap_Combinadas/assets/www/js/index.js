@@ -1,5 +1,5 @@
 var operacion = "";
-var longMax = 8;
+var longMax = 10;
 var longAct = parseInt("0");
 var corchAb = false;
 var parAb = false;
@@ -156,6 +156,7 @@ function cuerpoOperacion() {
 						operacion += "] ";
 						caracUlt = 6;
 						corchAb = false;
+						corchUtil = false;
 					} else {
 						operacion += getSigno();
 						caracUlt = 4;
@@ -211,6 +212,7 @@ function cuerpoOperacion() {
 						operacion += "] ";
 						caracUlt = 6;
 						corchAb = false;
+						corchUtil = false;
 					} else {
 						operacion += getSigno();
 						caracUlt = 4;
@@ -244,14 +246,16 @@ function ultimoCaracter(){
 			getOperacion();
 			return;
 		}
-		operacion += "]";
+		operacion += "] ";
+		corchAb = false;
+		corchUtil = false;
 	} else if (parAb == true) {
 		if (haySigno == false) {
 			reset();
 			getOperacion();
 			return;
 		}
-		operacion += ")";
+		operacion += ") ";
 	}
 }
 

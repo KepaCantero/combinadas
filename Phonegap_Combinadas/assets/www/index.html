@@ -15,20 +15,33 @@
 	</head>
 
 	<body>
+	    <div id="inicioPage" data-role="page">
+            <div data-role="content">
+                <input id="slider1" type="range" value="4" min="4" max="10" data-highlight="true"/>
+                
+                <div class="boxBoton">
+                    <input id="botConCorch" data-theme=a type="button" value="Con corchetes">
+                </div>
+                
+                <div class="boxBoton">
+                    <input id="botSinCorch" data-theme=a type="button" value="Sin corchetes">
+                </div>            
+            </div>
+        </div>
+	    
 		<div id="combinadasPage" data-role="page">
-
 			<div data-role="content">
 				<div id="boxOperacion"></div>
+				
+				<input id="pruebas" type="number" pattern="[0-9+-*/]*" value="" placeholder="Haz aquí tus cálculos" />
 				
 				<div id="tituloResultado">Resultado:</div>
 				<div id="boxResultado"></div>
 				
-				<div id="boxBoton">
-					<input id="botOperacion" data-theme=a type="button" value="Nueva">
-				</div>
-
+                <div class="boxBoton">
+                    <input id="botOperacion" data-theme=a type="button" value="Nueva">
+                </div>                
 			</div>
-
 		</div>
 
 		<script src="js/index.js"></script>

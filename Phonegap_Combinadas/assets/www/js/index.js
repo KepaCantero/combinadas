@@ -1,13 +1,26 @@
-var operacion = "";
-var longMax = 10;
-var longAct = parseInt("0");
-var corchAb = false;
-var parAb = false;
-var corchUtil = false;
-var caracUlt = parseInt("0");
-var haySigno = false;
-var hayPar = false;
-var corchIni = false;
+var operacion = ""; //String que contiene la operación
+
+var longMax = parseInt("0"); //Cantidad de números en la operación
+var longAct = parseInt("0"); //Números ya introducidos
+
+var corchAb = false; //Si un corchete ha sido abierto y no cerrado
+var corchIni = false; //Si un corchete se ha abierto al principio
+var hayPar = false; //Si el corchete contiene un paréntesis cerrado
+var corchUtil = false; //Si el corchete contiene un paréntesis cerrado y un signo
+
+var parAb = false; //Si un paréntesis ha sido abierto y no cerrado
+var haySigno = false; //Si el paréntesis contiene un signo
+
+var contPar = false; //Si la operación contiene un paréntesis
+var contCorch = false; //Si la operación contiene un corchete
+var contMult = false; //Si la operación contiene una multiplicación
+var contDiv = false; //Si la operación contiene una división
+
+var caracUlt = parseInt("0"); //Cuál ha sido el último caracter introducido
+//1: [ , 2: ( , 3: número , 4: signo , 5: ) , 6: ]
+
+
+
 
 
 //EVENTOS AL INICIO
@@ -17,12 +30,24 @@ window.addEventListener('load', function() {
 	FastClick.attach(document.body); 
 }, false);
 
+$('#inicioPage').bind('pagebeforeshow', function(event) {
+    reset();
+});
+
 $('#combinadasPage').bind('pageshow', function(event) {
 	getOperacion();
 });
 
-
 // LISTENERS
+
+$('#botConCorch').bind('vclick', function(event) { 
+    longMax = $("#slider1").val();
+    $.mobile.changePage($("#combinadasPage"));
+});
+
+$('#botSinCorch').bind('vclick', function(event) { 
+    alert("Sin corchetes");
+});
 
 $('#botOperacion').bind('vclick', function(event) { 
 	reset();
@@ -36,7 +61,13 @@ function getOperacion(){
 	primerCaracter();
 	cuerpoOperacion();
 	ultimoCaracter();
-	//var operacionLimpia = operacion.replace("*", "x");
+	
+	//Última comprobación para ver si la operación aporta algo
+	if (contCorch == false || contPar == false || contMult == false && contDiv == false){
+	   reset();
+	   getOperacion();
+	   return;    
+	}
 	
 	var operacionLimpia = operacion.split("*").join("x");
 	
@@ -67,10 +98,13 @@ function primerCaracter() {
 		caracUlt = 1;
 		corchAb = true;
 		corchIni = true;
+		corchUtil = false;
+		hayPar = false;
 	} else if (num >= 0.2 && num < 0.4){
 		operacion += "( ";
 		caracUlt = 2;
 		parAb = true;
+		haySigno = false;
 	} else {
 		operacion += getNum();
 		caracUlt = 3;
@@ -93,9 +127,9 @@ function cuerpoOperacion() {
 			caracUlt = 5;
 			parAb = false;
 			haySigno = false;
+			contPar = true;
 			if (corchAb == true){
 				hayPar = true;
-				corchUtil = true;
 			}
 		} else if (corchUtil == true && haySigno == false && parAb == true) {
 		    reset();
@@ -110,6 +144,7 @@ function cuerpoOperacion() {
 					operacion += "( ";
 					caracUlt = 2;
 					parAb = true;
+					haySigno = false;
 				} else {
 					operacion += getNum();
 					caracUlt = 3;
@@ -131,6 +166,7 @@ function cuerpoOperacion() {
 						caracUlt = 5;
 						parAb = false;
 						haySigno = false;
+						contPar = true;
 						if (corchAb == true){
 							hayPar = true;
 						}
@@ -148,7 +184,6 @@ function cuerpoOperacion() {
 					haySigno = true;
 					if (hayPar == true){
 						corchUtil = true;
-						hayPar = false;
 					}
 				} else if (corchAb == true && corchUtil == true) {
 					var num = Math.random();
@@ -157,6 +192,7 @@ function cuerpoOperacion() {
 						caracUlt = 6;
 						corchAb = false;
 						corchUtil = false;
+						contCorch = true;
 					} else {
 						operacion += getSigno();
 						caracUlt = 4;
@@ -178,10 +214,14 @@ function cuerpoOperacion() {
 						operacion += "( ";
 						caracUlt = 2;
 						parAb = true;
+						haySigno = false;
 					} else {
 						operacion += getNum();
 						caracUlt = 3;
 						longAct++;
+					}
+					if (corchUtil == false && hayPar == true) {
+					    corchUtil = true;
 					}
 				} else if (parAb == false) { //Así no se abren paréntesis ni corchetes dentro de paréntesis
 					var num = Math.random();
@@ -189,10 +229,13 @@ function cuerpoOperacion() {
 						operacion += "[ ";
 						caracUlt = 1;
 						corchAb = true;
+						corchUtil = false;
+                        hayPar = false;
 					} else if (num >= 0.2 && num < 0.4) {
 						operacion += "( ";
 						caracUlt = 2;
 						parAb = true;
+						haySigno = false;
 					} else {
 						operacion += getNum();
 						caracUlt = 3;
@@ -213,6 +256,7 @@ function cuerpoOperacion() {
 						caracUlt = 6;
 						corchAb = false;
 						corchUtil = false;
+						contCorch = true;
 					} else {
 						operacion += getSigno();
 						caracUlt = 4;
@@ -249,6 +293,7 @@ function ultimoCaracter(){
 		operacion += "] ";
 		corchAb = false;
 		corchUtil = false;
+		contCorch = true;
 	} else if (parAb == true) {
 		if (haySigno == false) {
 			reset();
@@ -256,6 +301,7 @@ function ultimoCaracter(){
 			return;
 		}
 		operacion += ") ";
+		contPar = true;
 	}
 }
 
@@ -275,8 +321,10 @@ function getSigno(){
 		signo = "- ";
 	} else if (num >= 0.65 && num < 0.825){
 		signo = "* ";
+		contMult = true;
 	} else {
 		signo = "/ ";
+		contDiv = true;
 	}
 	return signo;
 }
@@ -290,6 +338,10 @@ function reset() {
 	haySigno = false;
 	hayPar = false;
 	corchIni = false;
+	contCorch = false;
+	contPar = false;
+	contMult = false;
+	contDiv = false;
 	$("#boxOperacion").html("");
 	$("#boxResultado").html("");
 }

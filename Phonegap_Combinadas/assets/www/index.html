@@ -19,13 +19,20 @@
             <div data-role="content">
                 <input id="slider1" type="range" value="4" min="4" max="20" data-highlight="true"/>
                 
-                <div class="boxBoton">
-                    <input id="botConCorch" data-theme=a type="button" value="Con corchetes">
+                <div id="checkBoxes">
+	                <fieldset id="checkBoxesInt" data-role="controlgroup" data-type="horizontal">
+	                	<input type="checkbox" id="checkbox-div" class="custom" /> 
+	                	<label for="checkbox-div">/</label> 
+	                	<input type="checkbox" id="checkbox-par" class="custom" /> 
+	                	<label for="checkbox-par">( )</label>
+	                	<input type="checkbox" id="checkbox-cor" class="custom" /> 
+	                	<label for="checkbox-cor">[ ]</label>
+	                </fieldset>
                 </div>
                 
                 <div class="boxBoton">
-                    <input id="botSinCorch" data-theme=a type="button" value="Sin corchetes">
-                </div>            
+                    <input id="botEmpezar" data-theme=a type="button" value="¡Empezar!">
+                </div>           
             </div>
         </div>
 	    

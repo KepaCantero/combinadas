@@ -19,8 +19,9 @@ var contDiv = false; //Si la operación contiene una división
 var caracUlt = parseInt("0"); //Cuál ha sido el último caracter introducido
 //1: [ , 2: ( , 3: número , 4: signo , 5: ) , 6: ]
 
-
-
+var modoCD = false; //Modo de juego con divisiones
+var modoCP = false; //Modo de juego con paréntesis
+var modoCC = false; //Modo de juego con corchetes
 
 
 //EVENTOS AL INICIO
@@ -38,15 +39,24 @@ $('#combinadasPage').bind('pageshow', function(event) {
 	getOperacion();
 });
 
+
 // LISTENERS
 
-$('#botConCorch').bind('vclick', function(event) { 
-    longMax = $("#slider1").val();
-    $.mobile.changePage($("#combinadasPage"));
+$('#checkbox-div').bind ("change", function (event) {
+	modoCD = $("#checkbox-div").is(":checked");
 });
 
-$('#botSinCorch').bind('vclick', function(event) { 
-    alert("Sin corchetes");
+$('#checkbox-par').bind ("change", function (event) {
+	modoCP = $("#checkbox-par").is(":checked");
+});
+
+$('#checkbox-cor').bind ("change", function (event) {
+	modoCC = $("#checkbox-cor").is(":checked");
+});
+
+$('#botEmpezar').bind('vclick', function(event) { 
+    longMax = $("#slider1").val();
+    $.mobile.changePage($("#combinadasPage"));
 });
 
 $('#botOperacion').bind('vclick', function(event) { 
@@ -54,7 +64,9 @@ $('#botOperacion').bind('vclick', function(event) {
 	getOperacion();
 });
 
- 
+
+
+
 //FUNCIONES
 
 function getOperacion(){
@@ -310,18 +322,30 @@ function getNum() {
 function getSigno(){
 	var signo;
 	var num = Math.random();
-	if (num < 0.35){
-		signo = "+ ";
-	} else if (num >= 0.35 && num < 0.65) {
-		signo = "- ";
-	} else if (num >= 0.65 && num < 0.825){
-		signo = "* ";
-		contMult = true;
+	if (modoCD == true) {
+		if (num < 0.35){
+			signo = "+ ";
+		} else if (num >= 0.35 && num < 0.65) {
+			signo = "- ";
+		} else if (num >= 0.65 && num < 0.825){
+			signo = "* ";
+			contMult = true;
+		} else {
+			signo = "/ ";
+			contDiv = true;
+		}
+		return signo;
 	} else {
-		signo = "/ ";
-		contDiv = true;
+		if (num < 0.35){
+			signo = "+ ";
+		} else if (num >= 0.35 && num < 0.65) {
+			signo = "- ";
+		} else {
+			signo = "* ";
+			contMult = true;
+		}
+		return signo;
 	}
-	return signo;
 }
 
 function reset() {

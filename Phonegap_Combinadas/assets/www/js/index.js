@@ -69,25 +69,20 @@ function getOperacion(){
 	   return;    
 	}
 	
-	var operacionLimpia = operacion.split("*").join("x");
+	var operacionLimpia = operacion.split("*").join("x");	
+	$("#boxOperacion").html(operacionLimpia);
 	
-	try {
-		$("#boxOperacion").html(operacionLimpia);
-	} catch(e){
-		alert("Excepción");
-		reset();
-		getOperacion();
-	}
+	//Esto cambia los corchetes por paréntesis para evitar errores al calcular el resultado
+	operacionSC = operacion.split("]").join(")").split("[").join("(");
 	
-	if (parseFloat(eval(operacion)) !== "NaN") {
-		var resultado = parseFloat(eval(operacion)).toFixed(2);
+	var resultado = parseFloat(eval(operacionSC)).toFixed(2);
+	if ( (resultado*100) % 100 == 0) { //Si el resultado es entero
 		var resString = resultado.toString();
 		resString = resString.split(".00").join(""); //Esto quita los decimales en caso de que el resultado sea entero
 		$("#boxResultado").html(resString);
 	} else {
-		alert("El resultado es NaN");
 		reset();
-		getOperacion();
+		getOperacion();	
 	}
 }
 

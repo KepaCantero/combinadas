@@ -34,6 +34,7 @@ window.addEventListener('load', function() {
 }, false);
 
 $('#inicioPage').bind('pagebeforeshow', function(event) {
+    $('#inputPruebas').elastic();
     reset();
     $('#checkbox-div').attr("checked", true).checkboxradio("refresh");
     $('#checkbox-par').attr("checked", true).checkboxradio("refresh");
@@ -556,4 +557,5 @@ function reset() {
 	$("#boxResultado").html("");
 	$("#inputPruebas").val("");
 	$("#inputResultado").val("");
+	$('#inputPruebas').css("height", "2em");
 }

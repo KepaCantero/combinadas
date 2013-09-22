@@ -14,7 +14,7 @@
 	padding: 5%;
 	margin-top: 15px;
 	/*background-color: #ADD8E6;*/
-	background-color: #ffEDA3;
+	background-color: #FFE787;
 	font-size: 1.4em;
 	text-align: center;
 	border-radius: 15px;
@@ -26,15 +26,11 @@
 
 #inputPruebas{
 	font-size: 1.2em;
-	min-height: 1.2em;
-	height: auto;
-	margin: 0 auto;
 }
 
 #divResultado{
 	width: 100%;
 	margin-top: 10px;
-	background-color: silver;
 }
 
 #boxResultado{
@@ -61,5 +57,8 @@
 }
 
 .boxBoton{
+	width: 50%;
 	margin-top: 30px;
+	margin-left: auto;
+	margin-right: auto;
 }

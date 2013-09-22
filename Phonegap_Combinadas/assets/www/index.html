@@ -31,7 +31,7 @@
                 </div>
                 
                 <div class="boxBoton">
-                    <input id="botEmpezar" data-theme=a type="button" value="¡Empezar!">
+                    <input id="botEmpezar" data-theme=b type="button" value="Hasi!">
                 </div>           
             </div>
         </div>
@@ -40,14 +40,26 @@
 			<div data-role="content">
 				<div id="boxOperacion"></div>
 				
-				<input id="pruebas" type="number" pattern="[0-9+-*/]*" value="" placeholder="Haz aquí tus cálculos" />
+				<div class="boxInput">
+					<textarea id="inputPruebas" type="number" pattern="[0-9+-*/()[]]*" value="" placeholder="Egin hemen zure probak"></textarea>
+				</div>
 				
-				<div id="tituloResultado">Resultado:</div>
-				<div id="boxResultado"></div>
+				<div id="divResultado">
+					<div id="boxResultado"></div>
+				</div>
 				
+				<div id="boxInputResultado">
+					<input id="inputResultado" type="number" value="" placeholder="Emaitza" />
+				</div>
+				
+				<div class="boxBoton">
+                    <input id="botResultado" data-theme=b type="button" value="Emaitza">
+                </div> 
+                
                 <div class="boxBoton">
-                    <input id="botOperacion" data-theme=a type="button" value="Nueva">
-                </div>                
+                    <input id="botOperacion" data-theme=e type="button" value="Berria">
+                </div>    
+                                            
 			</div>
 		</div>
 

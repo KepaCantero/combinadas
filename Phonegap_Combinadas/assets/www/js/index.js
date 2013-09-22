@@ -1,4 +1,5 @@
 var operacion = ""; //String que contiene la operación
+var resString = ""; //String que contiene el resultado limpio
 
 var longMax = parseInt("0"); //Cantidad de números en la operación
 var longAct = parseInt("0"); //Números ya introducidos
@@ -69,12 +70,29 @@ $('#botEmpezar').bind('vclick', function(event) {
     $.mobile.changePage($("#combinadasPage"));
 });
 
+$('#divResultado').bind('vclick', function(event) { 
+	var resObj = $('#boxResultado');
+	if ( resObj.css("visibility") == "hidden" ) {
+		resObj.css("visibility", "visible");
+	} else {
+		resObj.css("visibility", "hidden");
+	}
+});
+
 $('#botOperacion').bind('vclick', function(event) { 
 	reset();
 	getOperacion();
 });
 
-
+$('#botResultado').bind('vclick', function(event) { 
+	if ($("#inputResultado").val() == resString) {
+		alert("Emaitza zuzena!");
+		reset();
+		getOperacion();
+	} else {
+		alert("Emaitza ez da zuzena, \nsaiatu berriro");
+	}
+});
 
 
 //FUNCIONES
@@ -137,7 +155,7 @@ function getOperacion(){
 	
 	var resultado = parseFloat(eval(operacionSC)).toFixed(2);
 	if ( (resultado*100) % 100 == 0) { //Si el resultado es entero
-		var resString = resultado.toString();
+		resString = resultado.toString();
 		resString = resString.split(".00").join(""); //Esto quita los decimales en caso de que el resultado sea entero
 		$("#boxResultado").html(resString);
 	} else {
@@ -536,4 +554,6 @@ function reset() {
 	contDiv = false;
 	$("#boxOperacion").html("");
 	$("#boxResultado").html("");
+	$("#inputPruebas").val("");
+	$("#inputResultado").val("");
 }

@@ -16,7 +16,7 @@
 	</head>
 
 	<body>
-	    <div id="inicioPage" data-role="page">
+	    <!--<div id="inicioPage" data-role="page">
             <div data-role="content">
                 <input id="slider1" type="range" value="4" min="4" max="20" data-highlight="true"/>
                 
@@ -35,9 +35,34 @@
                     <input id="botEmpezar" data-theme=b type="button" value="Hasi!">
                 </div>           
             </div>
-        </div>
+     </div>-->
+	    <div id="inicioPage" data-role="page">
+	    	<div data-role="content">
+		    	<ul id="listaNiveles" data-role=listview data-inset="true">
+		    		<li data-role=list-divider>Biderketak</li>
+			        <li maila="1"> Maila 1 </li>
+			        <li maila="2"> Maila 2 </li>
+			        <li maila="3"> Maila 3 </li>
+			        <li maila="4"> Maila 4 </li>
+			        <li data-role=list-divider>Zatiketak</li>
+			        <li maila="5"> Maila 5 </li>
+			        <li maila="6"> Maila 6 </li>
+			        <li maila="7"> Maila 7 </li>
+			        <li maila="8"> Maila 8 </li>
+			        <li data-role=list-divider>Parentesiak</li>
+			        <li maila="9"> Maila 9 </li>
+			        <li maila="10"> Maila 10 </li>
+			        <li maila="11"> Maila 11 </li>
+			        <li maila="12"> Maila 12 </li>
+	    		</ul>
+    		</div>
+	    </div>
 	    
 		<div id="combinadasPage" data-role="page">
+			<div id="cabecera">
+				<div id="cab-izq"></div>
+				<div id="cab-dch"></div>
+			</div>
 			<div data-role="content">
 				<div id="boxOperacion"></div>
 				
@@ -57,14 +82,17 @@
                     <input id="botResultado" data-theme=b type="button" value="Emaitza">
                 </div> 
                 
-                <div class="boxBoton">
+                <!--<div class="boxBoton">
                     <input id="botOperacion" data-theme=e type="button" value="Berria">
-                </div>    
+                </div>-->    
                                             
 			</div>
 		</div>
 
 		<script src="js/index.js"></script>
+		<script src="js/juego.js"></script>
+		
+		
 
 	</body>
 </html>

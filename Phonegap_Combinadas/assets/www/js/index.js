@@ -21,12 +21,23 @@ var contDiv = false; //Si la operación contiene una división
 var caracUlt = parseInt("0"); //Cuál ha sido el último caracter introducido
 //1: [ , 2: ( , 3: número , 4: signo , 5: ) , 6: ]
 
-var modoCD = true; //Modo de juego con divisiones
-var modoCP = true; //Modo de juego con paréntesis
-var modoCC = true; //Modo de juego con corchetes
+var modoCD = false; //Modo de juego con divisiones
+var modoCP = false; //Modo de juego con paréntesis
+var modoCC = false; //Modo de juego con corchetes
+
+//VARIABLES PARA EL JUEGO
+var nivelAct = parseInt("1");  //Nivel actual
+var subnivelAct = parseInt("1"); //Subnivel actual (del 1 al 10)
+var subnivelesTot = parseInt("0"); //Subniveles jugados en total (para las estadísticas)
+var subnivelesTotNivel = []; //Subniveles totales jugados en este nivel (para las estadísticas)
+var fallosAct = parseInt("0"); //Fallos cometidos en los subniveles de este nivel
+var fallosTot = parseInt("0"); //Fallos cometidos en total (para las estadísticas)
+var fallosTotNivel = []; //Fallos totales cometidos en este nivel (para las estadísticas)
 
 
-//EVENTOS AL INICIO
+/////////////////////
+//EVENTOS AL INICIO//
+/////////////////////
 
 //Implementación de fastclick
 window.addEventListener('load', function() { 
@@ -34,21 +45,31 @@ window.addEventListener('load', function() {
 }, false);
 
 $('#inicioPage').bind('pagebeforeshow', function(event) {
-    $('#inputPruebas').elastic();
+    $('#listaNiveles').children('li').bind('vclick', function(e) {
+		e.preventDefault(); 
+		e.stopImmediatePropagation(); 
+		$('#listaNiveles').children('li').unbind('vclick');
+		nivelAct = parseInt( $(this).attr('maila') );
+		$.mobile.changePage($("#combinadasPage"));
+	});
+    
+    /*$('#inputPruebas').elastic();
     reset();
     $('#checkbox-div').attr("checked", true).checkboxradio("refresh");
     $('#checkbox-par').attr("checked", true).checkboxradio("refresh");
-    $('#checkbox-cor').attr("checked", true).checkboxradio("refresh");
+    $('#checkbox-cor').attr("checked", true).checkboxradio("refresh");*/
 });
 
 $('#combinadasPage').bind('pageshow', function(event) {
-	getOperacion();
+	mostrarNivel();
 });
 
 
-// LISTENERS
+//////////////
+// LISTENERS//
+//////////////
 
-$('#checkbox-div').bind ("change", function (event) {
+/*$('#checkbox-div').bind ("change", function (event) {
 	modoCD = $("#checkbox-div").is(":checked");
 });
 
@@ -69,7 +90,7 @@ $('#checkbox-cor').bind ("change", function (event) {
 $('#botEmpezar').bind('vclick', function(event) { 
     longMax = $("#slider1").val();
     $.mobile.changePage($("#combinadasPage"));
-});
+});*/
 
 $('#divResultado').bind('vclick', function(event) { 
 	var resObj = $('#boxResultado');
@@ -80,23 +101,142 @@ $('#divResultado').bind('vclick', function(event) {
 	}
 });
 
-$('#botOperacion').bind('vclick', function(event) { 
+/*$('#botOperacion').bind('vclick', function(event) { 
 	reset();
 	getOperacion();
-});
+});*/
 
 $('#botResultado').bind('vclick', function(event) { 
 	if ($("#inputResultado").val() == resString) {
 		alert("Emaitza zuzena!");
-		reset();
-		getOperacion();
+		proxSubnivel();
 	} else {
+		fallosAct++;
+		actualizarMarcador();
 		alert("Emaitza ez da zuzena, \nsaiatu berriro");
 	}
 });
 
 
-//FUNCIONES
+/////////////////////
+//GESTIÓN DEL JUEGO//
+/////////////////////
+
+function mostrarNivel(){
+	reset();
+	cargarVariables();
+	getOperacion();
+	actualizarMarcador();
+}
+
+function cargarVariables(){
+	switch(nivelAct) {
+		case 1: 
+			longMax = 3;
+			modoCD = false;
+			modoCP = false;
+			modoCC = false;
+			break;
+			
+		case 2: 
+			longMax = 4;
+			modoCD = false;
+			modoCP = false;
+			modoCC = false;
+			break;
+		
+		case 3: 
+			longMax = 5;
+			modoCD = false;
+			modoCP = false;
+			modoCC = false;
+			break;
+			
+		case 4: 
+			longMax = 6;
+			modoCD = false;
+			modoCP = false;
+			modoCC = false;
+			break;
+			
+		case 5: 
+			longMax = 3;
+			modoCD = true;
+			modoCP = false;
+			modoCC = false;
+			break;
+			
+		case 6: 
+			longMax = 4;
+			modoCD = true;
+			modoCP = false;
+			modoCC = false;
+			break;
+			
+		case 7: 
+			longMax = 5;
+			modoCD = true;
+			modoCP = false;
+			modoCC = false;
+			break;
+			
+		case 8: 
+			longMax = 6;
+			modoCD = true;
+			modoCP = false;
+			modoCC = false;
+			break;
+			
+		case 9: 
+			longMax = 3;
+			modoCD = false;
+			modoCP = true;
+			modoCC = false;
+			break;
+			
+		case 10: 
+			longMax = 4;
+			modoCD = false;
+			modoCP = true;
+			modoCC = false;
+			break;
+			
+		case 11: 
+			longMax = 5;
+			modoCD = false;
+			modoCP = true;
+			modoCC = false;
+			break;
+			
+		case 12: 
+			longMax = 6;
+			modoCD = false;
+			modoCP = true;
+			modoCC = false;
+			break;
+	}
+}
+
+function actualizarMarcador(){
+	$("#cab-izq").html("Maila: " + nivelAct + " - " + subnivelAct);
+	$("#cab-dch").html("Akatsak: " + fallosAct);	
+}
+
+function proxSubnivel(){
+	if (subnivelAct < 5) {
+		subnivelAct++;
+	} else {
+		nivelAct++;
+		fallosAct = 0;
+		subnivelAct = 1;
+	}
+	mostrarNivel();
+}
+
+
+//////////////////////////////////////
+//ALGORITMO PARA OBTENER OPERACIONES//
+//////////////////////////////////////
 
 function getOperacion(){
 	if (modoCC == true && modoCP == true) { //Modo corchetes y paréntesis

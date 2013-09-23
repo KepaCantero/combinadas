@@ -1,19 +1,50 @@
 /*   inicioPage   */
 
-#checkBoxes{
+/*#checkBoxes{
 	margin-top: 20px;
 	text-align: center;
+}*/
+
+#listaNiveles li{
+	font-size: 1.2em;
+	line-height: 2em;
 }
 
-
 /*   combinadasPage   */
+
+#cabecera{
+	width: 100%;
+	height: 2.4em;
+	background-color: #3473a6;
+}
+
+#cab-izq{
+	width: 48%;
+	margin-left: 2%;
+	/*margin-top: 0.4em;*/
+	font-size: 1.2em;
+	line-height: 2em;
+	color: white;
+	text-align: left;
+	float: left;
+}
+
+#cab-dch{
+	width: 48%;
+	margin-right: 2%;
+	/*margin-top: 0.4em;*/
+	line-height: 2em;
+	font-size: 1.2em;
+	color: white;
+	text-align: right;
+	float: left;
+}
 
 #boxOperacion{
 	width: 90%;
 	height: 50%;
 	padding: 5%;
 	margin-top: 15px;
-	/*background-color: #ADD8E6;*/
 	background-color: #FFE787;
 	font-size: 1.4em;
 	text-align: center;

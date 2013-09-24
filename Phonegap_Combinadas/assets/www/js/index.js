@@ -4,6 +4,9 @@ var resString = ""; //String que contiene el resultado limpio
 var longMax = parseInt("0"); //Cantidad de números en la operación
 var longAct = parseInt("0"); //Números ya introducidos
 
+var limMin = parseInt("0");
+var limMax = parseInt("0");
+
 var corchAb = false; //Si un corchete ha sido abierto y no cerrado
 var corchIni = false; //Si un corchete se ha abierto al principio
 var hayPar = false; //Si el corchete contiene un paréntesis cerrado
@@ -19,7 +22,7 @@ var contMult = false; //Si la operación contiene una multiplicación
 var contDiv = false; //Si la operación contiene una división
 
 var caracUlt = parseInt("0"); //Cuál ha sido el último caracter introducido
-//1: [ , 2: ( , 3: número , 4: signo , 5: ) , 6: ]
+//  1: [ , 2: ( , 3: número , 4: signo , 5: ) , 6: ]
 
 var modoCD = false; //Modo de juego con divisiones
 var modoCP = false; //Modo de juego con paréntesis
@@ -27,6 +30,7 @@ var modoCC = false; //Modo de juego con corchetes
 
 //VARIABLES PARA EL JUEGO
 var nivelAct = parseInt("1");  //Nivel actual
+var nivelSuperado = []; //Si un nivel determinado ha sido o no superado
 var subnivelAct = parseInt("1"); //Subnivel actual (del 1 al 10)
 var subnivelesTot = parseInt("0"); //Subniveles jugados en total (para las estadísticas)
 var subnivelesTotNivel = []; //Subniveles totales jugados en este nivel (para las estadísticas)
@@ -44,14 +48,53 @@ window.addEventListener('load', function() {
 	FastClick.attach(document.body); 
 }, false);
 
+
 $('#inicioPage').bind('pagebeforeshow', function(event) {
-    $('#listaNiveles').children('li').bind('vclick', function(e) {
+	
+	loadVars();
+
+	//$.mobile.sdCurrentDialog.close(); //Cierra el SimpleDialog por si se ha quedado abierto
+
+    var elListaNiveles = $('#listaNiveles');
+    
+    for ( var i = 0; i < 13; i++) {
+    	if ( subnivelesTotNivel[i] != null && subnivelesTotNivel[i] != 0) {
+	    	var porcentaje = parseFloat( (100 - (fallosTotNivel[i] * 100 / subnivelesTotNivel[i])) ).toFixed(2);
+	    	if ( (porcentaje*100) % 100 == 0) { //Si el resultado es entero
+				porcentaje = porcentaje.toString();
+				porcentaje = porcentaje.split(".00").join("");
+			}
+	    	$("#li-ctr-" + i).html( porcentaje + "%");
+	    	if (porcentaje < 50) {
+	    		$("#li-ctr-" + i).css("color", "red");
+	    	} else if (porcentaje >= 50 && porcentaje < 85) {
+	    		$("#li-ctr-" + i).css("color", "orange");
+	    	} else {
+	    		$("#li-ctr-" + i).css("color", "green");
+	    	}
+    	}
+    	if (nivelSuperado[i] == true) {
+    		$("#li-dch-" + i).html("<img src='img/check.png'>");
+    	}
+    }
+    
+    elListaNiveles.children('li').bind('vclick', function(e) {
 		e.preventDefault(); 
 		e.stopImmediatePropagation(); 
 		$('#listaNiveles').children('li').unbind('vclick');
 		nivelAct = parseInt( $(this).attr('maila') );
+		subnivelAct = parseInt("1");
+		fallosAct = parseInt("0");
 		$.mobile.changePage($("#combinadasPage"));
 	});
+    
+    elListaNiveles.listview({
+        autodividers: true,
+        autodividersSelector: function (li) {
+            var out = li.attr('tipo');
+            return out;
+        }
+    }).listview('refresh');
     
     /*$('#inputPruebas').elastic();
     reset();
@@ -101,19 +144,42 @@ $('#divResultado').bind('vclick', function(event) {
 	}
 });
 
-/*$('#botOperacion').bind('vclick', function(event) { 
+/*$('#botNueva').bind('vclick', function(event) { 
 	reset();
 	getOperacion();
 });*/
 
 $('#botResultado').bind('vclick', function(event) { 
 	if ($("#inputResultado").val() == resString) {
-		alert("Emaitza zuzena!");
+		//alert("Emaitza zuzena!");
+		$(document).simpledialog2({ 
+			theme: 'b',
+			mode: 'blank',
+			animate: false,
+			showModal: false,
+			blankContent : "<div style='padding:15px;'>" +				
+				"<h2 style='text-align:center;'>Emaitza zuzena!</h2>" + 
+				"<a rel='close' data-role='button' href='#'>Onartu</a>" +
+				"</div>"
+		});
 		proxSubnivel();
 	} else {
 		fallosAct++;
+		fallosTot++;
+		fallosTotNivel[nivelAct]++;
 		actualizarMarcador();
-		alert("Emaitza ez da zuzena, \nsaiatu berriro");
+		saveVars();
+		//alert("Emaitza ez da zuzena, \nsaiatu berriro.");
+		$(document).simpledialog2({ 
+			theme: 'b',
+			mode: 'blank',
+			animate: false,
+			showModal: false,
+			blankContent : "<div style='padding:15px;'>" +				
+				"<h2 style='text-align:center;'>Emaitza ez da zuzena, \nsaiatu berriro.</h2>" + 
+				"<a rel='close' data-role='button' href='#'>Onartu</a>" +
+				"</div>"
+		});
 	}
 });
 
@@ -124,6 +190,13 @@ $('#botResultado').bind('vclick', function(event) {
 
 function mostrarNivel(){
 	reset();
+	//Inicializa los arrays para no dar valores nulos cuando deberían ser 0
+	if (fallosTotNivel[nivelAct] == null) {
+		fallosTotNivel[nivelAct] = parseInt("0");
+	}
+	if (subnivelesTotNivel[nivelAct] == null) {
+		subnivelesTotNivel[nivelAct] = parseInt("0");
+	}
 	cargarVariables();
 	getOperacion();
 	actualizarMarcador();
@@ -136,6 +209,8 @@ function cargarVariables(){
 			modoCD = false;
 			modoCP = false;
 			modoCC = false;
+			limMin = 0;
+			limMax = 30;
 			break;
 			
 		case 2: 
@@ -143,6 +218,8 @@ function cargarVariables(){
 			modoCD = false;
 			modoCP = false;
 			modoCC = false;
+			limMin = 0;
+			limMax = 40;
 			break;
 		
 		case 3: 
@@ -150,6 +227,8 @@ function cargarVariables(){
 			modoCD = false;
 			modoCP = false;
 			modoCC = false;
+			limMin = 0;
+			limMax = 50;
 			break;
 			
 		case 4: 
@@ -157,6 +236,8 @@ function cargarVariables(){
 			modoCD = false;
 			modoCP = false;
 			modoCC = false;
+			limMin = 0;
+			limMax = 50;
 			break;
 			
 		case 5: 
@@ -164,6 +245,8 @@ function cargarVariables(){
 			modoCD = true;
 			modoCP = false;
 			modoCC = false;
+			limMin = 0;
+			limMax = 30;
 			break;
 			
 		case 6: 
@@ -171,6 +254,8 @@ function cargarVariables(){
 			modoCD = true;
 			modoCP = false;
 			modoCC = false;
+			limMin = 0;
+			limMax = 40;
 			break;
 			
 		case 7: 
@@ -178,6 +263,8 @@ function cargarVariables(){
 			modoCD = true;
 			modoCP = false;
 			modoCC = false;
+			limMin = 0;
+			limMax = 50;
 			break;
 			
 		case 8: 
@@ -185,6 +272,8 @@ function cargarVariables(){
 			modoCD = true;
 			modoCP = false;
 			modoCC = false;
+			limMin = 0;
+			limMax = 50;
 			break;
 			
 		case 9: 
@@ -192,6 +281,8 @@ function cargarVariables(){
 			modoCD = false;
 			modoCP = true;
 			modoCC = false;
+			limMin = -30;
+			limMax = 30;
 			break;
 			
 		case 10: 
@@ -199,6 +290,8 @@ function cargarVariables(){
 			modoCD = false;
 			modoCP = true;
 			modoCC = false;
+			limMin = -30;
+			limMax = 40;
 			break;
 			
 		case 11: 
@@ -206,6 +299,8 @@ function cargarVariables(){
 			modoCD = false;
 			modoCP = true;
 			modoCC = false;
+			limMin = -30;
+			limMax = 50;
 			break;
 			
 		case 12: 
@@ -213,6 +308,8 @@ function cargarVariables(){
 			modoCD = false;
 			modoCP = true;
 			modoCC = false;
+			limMin = -30;
+			limMax = 50;
 			break;
 	}
 }
@@ -224,15 +321,64 @@ function actualizarMarcador(){
 
 function proxSubnivel(){
 	if (subnivelAct < 5) {
+		subnivelesTot++;
+		subnivelesTotNivel[nivelAct]++;
 		subnivelAct++;
+		saveVars();
 	} else {
-		nivelAct++;
-		fallosAct = 0;
-		subnivelAct = 1;
+		if (nivelAct == 12) {
+			nivelSuperado[nivelAct] = true;
+			subnivelesTot++;
+			subnivelesTotNivel[nivelAct]++;
+			fallosAct = 0;
+			subnivelAct = 1;
+			saveVars();
+			//alert("ZORIONAK!\n Azken maila gainditu duzu!");
+			$(document).simpledialog2({ 
+				theme: 'b',
+				mode: 'blank',
+				animate: false,
+				showModal: false,
+				blankContent : "<div style='padding:15px;'>" +				
+					"<h2 style='text-align:center;'>ZORIONAK!\n Azken maila gainditu duzu!</h2>" + 
+					"<a rel='close' data-role='button' href='#'>Onartu</a>" +
+					"</div>"
+			});
+			$.mobile.changePage($("#inicioPage"));			
+		} else {
+			nivelSuperado[nivelAct] = true;
+			subnivelesTot++;
+			subnivelesTotNivel[nivelAct]++;
+			nivelAct++;
+			fallosAct = 0;
+			subnivelAct = 1;
+			saveVars();
+		}
 	}
 	mostrarNivel();
 }
 
+function saveVars() {
+	localStorage.setItem("subnivelesTot", subnivelesTot);
+	localStorage.setItem("fallosTot", fallosTot);
+	localStorage["nivelSuperado"] = JSON.stringify(nivelSuperado);
+	localStorage["subnivelesTotNivel"] = JSON.stringify(subnivelesTotNivel);
+	localStorage["fallosTotNivel"] = JSON.stringify(fallosTotNivel);
+}
+
+function loadVars() {
+	subnivelesTot = localStorage.getItem("subnivelesTot");
+	fallosTot = localStorage.getItem("fallosTot");
+	if (localStorage["nivelSuperado"] != null) {
+		nivelSuperado = JSON.parse(localStorage["nivelSuperado"]);
+	}
+	if (localStorage["subnivelesTotNivel"] != null) {
+		subnivelesTotNivel = JSON.parse(localStorage["subnivelesTotNivel"]);
+	}
+	if (localStorage["fallosTotNivel"] != null) {
+		fallosTotNivel = JSON.parse(localStorage["fallosTotNivel"]);
+	}
+}
 
 //////////////////////////////////////
 //ALGORITMO PARA OBTENER OPERACIONES//
@@ -295,7 +441,10 @@ function getOperacion(){
 	operacionSC = operacion.split("]").join(")").split("[").join("(");
 	
 	var resultado = parseFloat(eval(operacionSC)).toFixed(2);
-	if ( (resultado*100) % 100 == 0) { //Si el resultado es entero
+	if (resultado < limMin || resultado > limMax) { //Comprueba que el resultado esté dentro de los límites del nivel
+		reset();
+		getOperacion();
+	} else if ( (resultado*100) % 100 == 0) { //Si el resultado es entero
 		resString = resultado.toString();
 		resString = resString.split(".00").join(""); //Esto quita los decimales en caso de que el resultado sea entero
 		$("#boxResultado").html(resString);

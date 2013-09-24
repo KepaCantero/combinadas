@@ -79,13 +79,34 @@ $('#inicioPage').bind('pagebeforeshow', function(event) {
     }
     
     elListaNiveles.children('li').bind('vclick', function(e) {
-		e.preventDefault(); 
+		/*e.preventDefault(); 
 		e.stopImmediatePropagation(); 
-		$('#listaNiveles').children('li').unbind('vclick');
-		nivelAct = parseInt( $(this).attr('maila') );
-		subnivelAct = parseInt("1");
-		fallosAct = parseInt("0");
-		$.mobile.changePage($("#combinadasPage"));
+		$('#listaNiveles').children('li').unbind('vclick');*/
+		var nivelElegido = parseInt( $(this).attr('maila') );
+		
+		$('<div>').simpledialog2({
+            mode: 'button',
+            theme: 'b',
+            animate: false,
+            showModal: false,
+            buttonPrompt: '<h2>Maila hau bakarrik jolastu nahi duzu, ala jarraitu nahi duzu?</h2>',
+            buttons : {
+                'Hau bakarrik': {
+                    click: function () { 
+                        nivelAct = nivelElegido;
+                        subnivelAct = parseInt("1");
+                        fallosAct = parseInt("0");
+                        $.mobile.changePage($("#combinadasPage"));
+                    }
+                },
+                'Jarraitu': {
+                    click: function () { 
+                        alerta("Jarraitu");
+                    }
+                }
+            }
+        });
+		
 	});
     
     elListaNiveles.listview({
@@ -152,16 +173,7 @@ $('#divResultado').bind('vclick', function(event) {
 $('#botResultado').bind('vclick', function(event) { 
 	if ($("#inputResultado").val() == resString) {
 		//alert("Emaitza zuzena!");
-		$(document).simpledialog2({ 
-			theme: 'b',
-			mode: 'blank',
-			animate: false,
-			showModal: false,
-			blankContent : "<div style='padding:15px;'>" +				
-				"<h2 style='text-align:center;'>Emaitza zuzena!</h2>" + 
-				"<a rel='close' data-role='button' href='#'>Onartu</a>" +
-				"</div>"
-		});
+		alerta("Emaitza zuzena!");
 		proxSubnivel();
 	} else {
 		fallosAct++;
@@ -169,17 +181,7 @@ $('#botResultado').bind('vclick', function(event) {
 		fallosTotNivel[nivelAct]++;
 		actualizarMarcador();
 		saveVars();
-		//alert("Emaitza ez da zuzena, \nsaiatu berriro.");
-		$(document).simpledialog2({ 
-			theme: 'b',
-			mode: 'blank',
-			animate: false,
-			showModal: false,
-			blankContent : "<div style='padding:15px;'>" +				
-				"<h2 style='text-align:center;'>Emaitza ez da zuzena, \nsaiatu berriro.</h2>" + 
-				"<a rel='close' data-role='button' href='#'>Onartu</a>" +
-				"</div>"
-		});
+		alerta("Emaitza ez da zuzena, \nsaiatu berriro.");
 	}
 });
 
@@ -333,17 +335,7 @@ function proxSubnivel(){
 			fallosAct = 0;
 			subnivelAct = 1;
 			saveVars();
-			//alert("ZORIONAK!\n Azken maila gainditu duzu!");
-			$(document).simpledialog2({ 
-				theme: 'b',
-				mode: 'blank',
-				animate: false,
-				showModal: false,
-				blankContent : "<div style='padding:15px;'>" +				
-					"<h2 style='text-align:center;'>ZORIONAK!\n Azken maila gainditu duzu!</h2>" + 
-					"<a rel='close' data-role='button' href='#'>Onartu</a>" +
-					"</div>"
-			});
+			alerta("ZORIONAK!\n Azken maila gainditu duzu!");
 			$.mobile.changePage($("#inicioPage"));			
 		} else {
 			nivelSuperado[nivelAct] = true;
@@ -356,6 +348,19 @@ function proxSubnivel(){
 		}
 	}
 	mostrarNivel();
+}
+
+function alerta(mensaje) {
+    $(document).simpledialog2({ 
+                theme: 'b',
+                mode: 'blank',
+                animate: false,
+                showModal: false,
+                blankContent : "<div style='padding:15px;'>" +              
+                    "<h2 style='text-align:center;'>" + mensaje + "</h2>" + 
+                    "<a rel='close' data-role='button' href='#'>Onartu</a>" +
+                    "</div>"
+            });
 }
 
 function saveVars() {

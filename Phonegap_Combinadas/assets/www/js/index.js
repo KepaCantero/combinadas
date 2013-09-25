@@ -28,6 +28,8 @@ var modoCD = false; //Modo de juego con divisiones
 var modoCP = false; //Modo de juego con paréntesis
 var modoCC = false; //Modo de juego con corchetes
 
+var modoJuego = parseInt("0"); // Si es 1, se juegan los niveles seguidos; si es 2, solo un nivel
+
 //VARIABLES PARA EL JUEGO
 var nivelAct = parseInt("1");  //Nivel actual
 var nivelSuperado = []; //Si un nivel determinado ha sido o no superado
@@ -49,11 +51,15 @@ window.addEventListener('load', function() {
 }, false);
 
 
-$('#inicioPage').bind('pagebeforeshow', function(event) {
+$('#listaPage').bind('pagebeforeshow', function(event) {
 	
 	loadVars();
 
-	//$.mobile.sdCurrentDialog.close(); //Cierra el SimpleDialog por si se ha quedado abierto
+	if (modoJuego == 1) {
+		$("#cabeceraL").html("MODU ARRUNTA");
+	} else {
+		$("#cabeceraL").html("MAILA BAT BAKARRIK");
+	}
 
     var elListaNiveles = $('#listaNiveles');
     
@@ -79,38 +85,18 @@ $('#inicioPage').bind('pagebeforeshow', function(event) {
     }
     
     elListaNiveles.children('li').bind('vclick', function(e) {
-		/*e.preventDefault(); 
+		e.preventDefault(); 
 		e.stopImmediatePropagation(); 
-		$('#listaNiveles').children('li').unbind('vclick');*/
-		var nivelElegido = parseInt( $(this).attr('maila') );
-		
-		$('<div>').simpledialog2({
-            mode: 'button',
-            theme: 'b',
-            animate: false,
-            showModal: false,
-            buttonPrompt: '<h2>Maila hau bakarrik jolastu nahi duzu, ala jarraitu nahi duzu?</h2>',
-            buttons : {
-                'Hau bakarrik': {
-                    click: function () { 
-                        nivelAct = nivelElegido;
-                        subnivelAct = parseInt("1");
-                        fallosAct = parseInt("0");
-                        $.mobile.changePage($("#combinadasPage"));
-                    }
-                },
-                'Jarraitu': {
-                    click: function () { 
-                        alerta("Jarraitu");
-                    }
-                }
-            }
-        });
-		
+		$('#listaNiveles').children('li').unbind('vclick');
+		nivelAct = parseInt( $(this).attr('maila') );
+		subnivelAct = parseInt("1");
+        fallosAct = parseInt("0");
+        $.mobile.changePage($("#combinadasPage"));		
 	});
     
     elListaNiveles.listview({
         autodividers: true,
+        autodividersTheme: "e",
         autodividersSelector: function (li) {
             var out = li.attr('tipo');
             return out;
@@ -156,6 +142,20 @@ $('#botEmpezar').bind('vclick', function(event) {
     $.mobile.changePage($("#combinadasPage"));
 });*/
 
+$('#botModo1').bind('vclick', function(event) { 
+    modoJuego = 1;
+    $.mobile.changePage($("#listaPage"));
+});
+
+$('#botModo2').bind('vclick', function(event) {
+    modoJuego = 2;
+    $.mobile.changePage($("#listaPage"));
+});
+
+$('#botEstadisticas').bind('vclick', function(event) {
+    $.mobile.changePage($("#estadisticasPage"));
+});
+
 $('#divResultado').bind('vclick', function(event) { 
 	var resObj = $('#boxResultado');
 	if ( resObj.css("visibility") == "hidden" ) {
@@ -172,8 +172,11 @@ $('#divResultado').bind('vclick', function(event) {
 
 $('#botResultado').bind('vclick', function(event) { 
 	if ($("#inputResultado").val() == resString) {
-		//alert("Emaitza zuzena!");
-		alerta("Emaitza zuzena!");
+		if (subnivelAct == 5) {
+			alerta("Emaitza zuzena!\nMaila " + nivelAct + "\n\ngainditu duzu!");
+		} else {
+			alerta("Emaitza zuzena!");
+		}
 		proxSubnivel();
 	} else {
 		fallosAct++;
@@ -317,41 +320,51 @@ function cargarVariables(){
 }
 
 function actualizarMarcador(){
-	$("#cab-izq").html("Maila: " + nivelAct + " - " + subnivelAct);
+	if (modoJuego == 1) {
+		$("#cab-izq").html("Maila: " + nivelAct + " - " + subnivelAct);
+	} else {
+		$("#cab-izq").html("Maila: " + nivelAct + " - n");
+	}
 	$("#cab-dch").html("Akatsak: " + fallosAct);	
 }
 
 function proxSubnivel(){
-	if (subnivelAct < 5) {
+	if (modoJuego == 1) {
+		if (subnivelAct < 5) {
+			subnivelesTot++;
+			subnivelesTotNivel[nivelAct]++;
+			subnivelAct++;
+			saveVars();
+		} else {
+			if (nivelAct == 12) {
+				nivelSuperado[nivelAct] = true;
+				subnivelesTot++;
+				subnivelesTotNivel[nivelAct]++;
+				fallosAct = 0;
+				subnivelAct = 1;
+				saveVars();
+				alerta("ZORIONAK!\n Azken maila gainditu duzu!");
+				$.mobile.changePage($("#listaPage"));			
+			} else {
+				nivelSuperado[nivelAct] = true;
+				subnivelesTot++;
+				subnivelesTotNivel[nivelAct]++;
+				nivelAct++;
+				fallosAct = 0;
+				subnivelAct = 1;
+				saveVars();
+			}
+		}
+	} else {
 		subnivelesTot++;
 		subnivelesTotNivel[nivelAct]++;
-		subnivelAct++;
 		saveVars();
-	} else {
-		if (nivelAct == 12) {
-			nivelSuperado[nivelAct] = true;
-			subnivelesTot++;
-			subnivelesTotNivel[nivelAct]++;
-			fallosAct = 0;
-			subnivelAct = 1;
-			saveVars();
-			alerta("ZORIONAK!\n Azken maila gainditu duzu!");
-			$.mobile.changePage($("#inicioPage"));			
-		} else {
-			nivelSuperado[nivelAct] = true;
-			subnivelesTot++;
-			subnivelesTotNivel[nivelAct]++;
-			nivelAct++;
-			fallosAct = 0;
-			subnivelAct = 1;
-			saveVars();
-		}
 	}
 	mostrarNivel();
 }
 
 function alerta(mensaje) {
-    $(document).simpledialog2({ 
+    $("#combinadasPage").simpledialog2({ 
                 theme: 'b',
                 mode: 'blank',
                 animate: false,

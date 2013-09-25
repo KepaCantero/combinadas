@@ -17,29 +17,29 @@
 	</head>
 
 	<body>
-	    <!--<div id="inicioPage" data-role="page">
-            <div data-role="content">
-                <input id="slider1" type="range" value="4" min="4" max="20" data-highlight="true"/>
-                
-                <div id="checkBoxes">
-	                <fieldset id="checkBoxesInt" data-role="controlgroup" data-type="horizontal">
-	                	<input type="checkbox" id="checkbox-div" data-theme=c /> 
-	                	<label for="checkbox-div">/</label> 
-	                	<input type="checkbox" id="checkbox-par" data-theme=c /> 
-	                	<label for="checkbox-par">( )</label>
-	                	<input type="checkbox" id="checkbox-cor" data-theme=c /> 
-	                	<label for="checkbox-cor">[ ]</label>
-	                </fieldset>
-                </div>
-                
-                <div class="boxBoton">
-                    <input id="botEmpezar" data-theme=b type="button" value="Hasi!">
-                </div>           
-            </div>
-     </div>-->
+	    
 	    <div id="inicioPage" data-role="page">
 	    	<div data-role="content">
-		    	<ul id="listaNiveles" data-role="listview" data-inset="true" data-autodividers="true">
+	    		<div class="boxBoton2">
+					<div data-role=controlgroup>
+						<input id="botModo1" data-theme=b type=button value="Modu arrunta" />
+						<input id="botModo2" data-theme=b type=button value="Maila bat bakarrik" />
+					</div>
+				</div>
+				
+				<div class="boxBoton2">
+					<input id="botEstadisticas" data-theme=e type=button value="Estadistikak" />
+				</div>
+	    	</div>
+	    </div>
+	    
+	    <div id="listaPage" data-role="page">
+	    	
+	    	<div id="cabeceraL">
+			</div>
+	    	
+	    	<div data-role="content">
+		    	<ul id="listaNiveles" data-role="listview" data-dividertheme="e" data-inset="true" data-autodividers="true">
 		    		<!--<li data-role=list-divider>Biderketak</li>-->
 			        <li maila="1" tipo="Biderketak">  
 			        	<div class="contLi">

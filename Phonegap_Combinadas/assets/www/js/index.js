@@ -50,15 +50,24 @@ window.addEventListener('load', function() {
 	FastClick.attach(document.body); 
 }, false);
 
+$('#inicioPage').bind('pagebeforeshow', function(event) {
+    if ($.mobile.sdCurrentDialog != null) {
+        $.mobile.sdCurrentDialog.close();
+    }
+});
 
 $('#listaPage').bind('pagebeforeshow', function(event) {
 	
 	loadVars();
 
+    if ($.mobile.sdCurrentDialog != null) {
+        $.mobile.sdCurrentDialog.close();
+    }
+
 	if (modoJuego == 1) {
-		$("#cabeceraL").html("MODU ARRUNTA");
+		$("#cab-dentro-lista").html("MODU ARRUNTA");
 	} else {
-		$("#cabeceraL").html("MAILA BAT BAKARRIK");
+		$("#cab-dentro-lista").html("MAILA BAT BAKARRIK");
 	}
 
     var elListaNiveles = $('#listaNiveles');
@@ -115,32 +124,9 @@ $('#combinadasPage').bind('pageshow', function(event) {
 });
 
 
-//////////////
-// LISTENERS//
-//////////////
-
-/*$('#checkbox-div').bind ("change", function (event) {
-	modoCD = $("#checkbox-div").is(":checked");
-});
-
-$('#checkbox-par').bind ("change", function (event) {
-	modoCP = $("#checkbox-par").is(":checked");
-	if (modoCP == false && $("#checkbox-cor").is(":checked") == true) {
-		$('#checkbox-cor').attr("checked", false).checkboxradio("refresh");
-	}
-});
-
-$('#checkbox-cor').bind ("change", function (event) {
-	modoCC = $("#checkbox-cor").is(":checked");
-	if (modoCC == true && $("#checkbox-par").is(":checked") == false) {
-		$('#checkbox-par').attr("checked", true).checkboxradio("refresh");
-	}
-});
-
-$('#botEmpezar').bind('vclick', function(event) { 
-    longMax = $("#slider1").val();
-    $.mobile.changePage($("#combinadasPage"));
-});*/
+///////////////
+// LISTENERS //
+///////////////
 
 $('#botModo1').bind('vclick', function(event) { 
     modoJuego = 1;
@@ -173,7 +159,7 @@ $('#divResultado').bind('vclick', function(event) {
 $('#botResultado').bind('vclick', function(event) { 
 	if ($("#inputResultado").val() == resString) {
 		if (subnivelAct == 5) {
-			alerta("Emaitza zuzena!\nMaila " + nivelAct + "\n\ngainditu duzu!");
+			alerta("Emaitza zuzena!\n<span style='color:green'>Maila " + nivelAct + " \ngainditu duzu!</span>");
 		} else {
 			alerta("Emaitza zuzena!");
 		}

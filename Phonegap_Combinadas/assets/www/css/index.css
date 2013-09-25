@@ -27,9 +27,9 @@
 /*   listaPage   */
 /*****************/
 
-#cabeceraL{
+#cabecera-lista{
 	width: 100%;
-	height: 2.1em;
+	height: 2.5em;
 	/*background: #3473a6;*/
 	text-shadow:0 1px 0 #000fff;
 	background-image:-webkit-gradient(linear,left top,left bottom,from(#5698c8),to(#336fab));
@@ -38,11 +38,18 @@
 	background-image:-ms-linear-gradient(#5698c8,#336fab);
 	background-image:-o-linear-gradient(#5698c8,#336fab);
 	background-image:linear-gradient(#5698c8,#336fab);
-	line-height: 2.1em;
-	font-size: 1.4em;
-	font-weight: 700;
-	color: white;
 	text-align: center;
+}
+
+#cab-dentro-lista{
+    width: 92%;
+    margin-left: 4%;
+    margin-right: 4%;
+    font-size: 1.4em;
+    font-weight: 600;
+    line-height: 1.8em; /*Este valor es la altura del contenedor menos la mitad del tamaño de la fuente*/
+    color: white;
+    text-align: center;
 }
 
 #listaNiveles li{
@@ -100,6 +107,7 @@
 	width: 46%;
 	margin-left: 4%;
 	font-size: 1.4em;
+	font-weight: 600;
 	line-height: 1.8em; /*Este valor es la altura del contenedor menos la mitad del tamaño de la fuente*/
 	color: white;
 	text-align: left;
@@ -110,6 +118,7 @@
 	width: 46%;
 	margin-right: 4%;
 	font-size: 1.4em;
+	font-weight: 600;
 	line-height: 1.8em; /*Este valor es la altura del contenedor menos la mitad del tamaño de la fuente*/
 	color: white;
 	text-align: right;
@@ -131,7 +140,7 @@
 	background-image:linear-gradient(#ffea9f,#fed942);
 	color: #004371;
 	font-size: 1.5em;
-	font-weight: 500;
+	font-weight: 600;
 	text-align: center;
 	border-radius: 15px;
 }

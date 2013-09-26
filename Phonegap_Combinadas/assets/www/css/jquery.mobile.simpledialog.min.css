@@ -38,11 +38,10 @@
 	display:block!important;
 	margin-left:auto;
 	margin-right:auto;
-	
 }
 
 .ui-simpledialog-screen-modal{
-	background-color:#FFE787;
+	background-color:black;
 	-moz-opacity:.8;
 	opacity:.80;
 	filter:alpha(opacity=80);
@@ -50,6 +49,18 @@
 
 .ui-simpledialog-subtitle{
 	text-align:center;
+	width:90%;
+	margin-left: auto;
+	margin-right: auto;
+	font-family: "customfont"!important;
+	color: orange;
+	font-size: 1.4em!important;
+}
+
+.ui-simpledialog-controls {
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-bottom: 15px;
 }
 
 .ui-simpledialog-controls .buttons-separator{
@@ -65,5 +76,11 @@
 }
 
 .ui-dialog-simpledialog .ui-content{
-	padding:5px!important;
+	*padding:5px!important;
+}
+
+.ui-dialog-controls .ui-btn-text { 
+	white-space: normal !important; 
+	font-family: "customfont";
+	font-size: 1.8em;
 }

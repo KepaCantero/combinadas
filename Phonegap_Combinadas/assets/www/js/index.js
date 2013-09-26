@@ -60,6 +60,14 @@ $('#inicioPage').bind('pagebeforeshow', function(event) {
         $.mobile.sdCurrentDialog.close();
     }
     
+    //Inicializa las variables para no dar valores nulos cuando deberían ser 0
+	if (subnivelesTot == null) {
+		subnivelesTot = parseInt("0");
+	}
+	if (fallosTot == null) {
+		fallosTot = parseInt("0");
+	}	
+    
     if (idioma == null) {
     	idioma = "EU";
     }
@@ -100,10 +108,14 @@ $('#listaPage').bind('pagebeforeshow', function(event) {
 	    	} else {
 	    		$("#li-ctr-" + i).css("color", "green");
 	    	}
+    	} else {
+    		$("#li-ctr-" + i).html("");
     	}
     	
     	if (nivelSuperado[i] == true) {
     		$("#li-dch-" + i).html("<img src='img/check.png'>");
+    	} else {
+    		$("#li-dch-" + i).html("");
     	}
     }
     
@@ -135,6 +147,47 @@ $('#listaPage').bind('pagebeforeshow', function(event) {
 
 $('#combinadasPage').bind('pageshow', function(event) {
 	mostrarNivel();
+});
+
+$('#estadisticasPage').bind('pagebeforeshow', function(event) {
+	$("#cab-dentro-estadisticas").html("ESTATISTIKAK");
+	
+	$("#est-izq-1").html("Gainditutako mailak");
+	$("#est-izq-2").html("Akatsik gabeko gainditutako eragiketen portzentaila");
+	$("#est-izq-3").html("Totalezko gainditutako eragiketak");
+	$("#est-izq-4").html("Totalezko akatsak");
+	
+	//Estadística 1 (Niveles superados)
+	var superados = parseInt("0");
+	for (var i = 1; i < 13; i++) {
+		if ( nivelSuperado[i] == true ) {
+			superados++;
+		}
+	}
+	$("#est-dch-1").html(superados + " / 12");
+	
+	//Estadística 2 (Porcentaje de niveles superados sin error)
+	if ( subnivelesTot != null && subnivelesTot != 0) {
+		var porcentaje = parseFloat( (100 - (fallosTot * 100 / subnivelesTot)) ).toFixed(2);
+		if ( (porcentaje*100) % 100 == 0) { //Si el resultado es entero
+			porcentaje = porcentaje.toString();
+			porcentaje = porcentaje.split(".00").join("");
+		}
+		$("#est-dch-2").html( porcentaje + "%");
+		if (porcentaje < 50) {
+			$("#est-dch-2").css("color", "red");
+		} else if (porcentaje >= 50 && porcentaje < 85) {
+			$("#est-dch-2").css("color", "orange");
+		} else {
+			$("#est-dch-2").css("color", "green");
+		}
+	}
+	
+	//Estadística 3 (Operaciones resueltas en total)
+	$("#est-dch-3").html(subnivelesTot);
+	
+	//Estadística 4 (Errores totales)
+	$("#est-dch-4").html(fallosTot);
 });
 
 
@@ -190,10 +243,38 @@ $('#botResultado').bind('vclick', function(event) {
 		fallosTotNivel[nivelAct]++;
 		actualizarMarcador();
 		saveVars();
-		alerta("Emaitza ez da zuzena, <br />saiatu berriro.");
+		alerta("<span style='color:red'>Emaitza ez da zuzena, <br />saiatu berriro.<span>");
 	}
 });
 
+$('#botBorrarEst').bind('vclick', function(event) { 
+	$('<div>').simpledialog2({
+	    mode: 'button',
+	    animate: false,
+	    buttonPrompt: "Ziur zaude estatistika guztiak ezabatu nahi duzula? <br />Aurrerapen guztiak galduko dituzu.",
+	    buttons : {
+	        'Bai': {
+		        click: function () { 
+		            nivelSuperado = [];
+					subnivelesTot = parseInt("0");
+					subnivelesTotNivel = [];
+					fallosTot = parseInt("0");
+					fallosTotNivel = [];
+					$("#est-dch-2").html(""); //Deja en blanco la segunda estadística, que por algún motivo no pierde su valor.
+					saveVars();
+					$.mobile.changePage($("#inicioPage"));
+		        }
+	        },
+	        'Ez': {
+		        click: function () { 
+		            $('#buttonoutput').text('Cancel');
+		        },
+		    icon: "delete",
+	        theme: "c"
+	        }
+	    }
+	});
+});
 
 /////////////////////
 //GESTIÓN DEL JUEGO//
@@ -371,15 +452,15 @@ function proxSubnivel(){
 
 function alerta(mensaje) {
     $("#combinadasPage").simpledialog2({ 
-                theme: 'b',
-                mode: 'blank',
-                animate: false,
-                showModal: false,
-                blankContent : "<div style='padding:15px;'>" +              
-                    "<h2 style='text-align:center;'>" + mensaje + "</h2>" + 
-                    "<a rel='close' data-role='button' href='#'>Onartu</a>" +
-                    "</div>"
-            });
+        theme: 'b',
+        mode: 'blank',
+        animate: false,
+        showModal: false,
+        blankContent : "<div style='padding:15px;'>" +              
+            "<h2 style='text-align:center;'>" + mensaje + "</h2>" + 
+            "<a rel='close' data-role='button' href='#'>Onartu</a>" +
+            "</div>"
+    });
 }
 
 function saveVars() {

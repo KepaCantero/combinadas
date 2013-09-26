@@ -32,7 +32,7 @@ public class example extends DroidGap
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        //super.setIntegerProperty("loadUrlTimeoutValue", 60000);
-        super.loadUrl("file:///android_asset/www/index.html");
+        super.setIntegerProperty("splashscreen", R.drawable.splash);
+        super.loadUrl("file:///android_asset/www/index.html", 3000);
     }
 }

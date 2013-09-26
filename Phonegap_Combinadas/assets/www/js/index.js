@@ -1,3 +1,5 @@
+var idioma = "EU"; //Idioma de la aplicación
+
 var operacion = ""; //String que contiene la operación
 var resString = ""; //String que contiene el resultado limpio
 
@@ -51,14 +53,22 @@ window.addEventListener('load', function() {
 }, false);
 
 $('#inicioPage').bind('pagebeforeshow', function(event) {
+
+	loadVars();
+
     if ($.mobile.sdCurrentDialog != null) {
         $.mobile.sdCurrentDialog.close();
     }
+    
+    if (idioma == null) {
+    	idioma = "EU";
+    }
+    
+    $('input[name="radio"]').filter('[value=' + idioma + ']').attr('checked', true).checkboxradio("refresh");;
+    
 });
 
 $('#listaPage').bind('pagebeforeshow', function(event) {
-	
-	loadVars();
 
     if ($.mobile.sdCurrentDialog != null) {
         $.mobile.sdCurrentDialog.close();
@@ -73,6 +83,9 @@ $('#listaPage').bind('pagebeforeshow', function(event) {
     var elListaNiveles = $('#listaNiveles');
     
     for ( var i = 0; i < 13; i++) {
+    	
+    	$("#li-izq-" + i).html( i + ". Maila");
+    	
     	if ( subnivelesTotNivel[i] != null && subnivelesTotNivel[i] != 0) {
 	    	var porcentaje = parseFloat( (100 - (fallosTotNivel[i] * 100 / subnivelesTotNivel[i])) ).toFixed(2);
 	    	if ( (porcentaje*100) % 100 == 0) { //Si el resultado es entero
@@ -88,6 +101,7 @@ $('#listaPage').bind('pagebeforeshow', function(event) {
 	    		$("#li-ctr-" + i).css("color", "green");
 	    	}
     	}
+    	
     	if (nivelSuperado[i] == true) {
     		$("#li-dch-" + i).html("<img src='img/check.png'>");
     	}
@@ -142,6 +156,12 @@ $('#botEstadisticas').bind('vclick', function(event) {
     $.mobile.changePage($("#estadisticasPage"));
 });
 
+$('#radioIdioma').bind('change', function(event) {
+    idioma = $('input[name=radio]:checked').val();
+    saveVars();
+});
+
+
 $('#divResultado').bind('vclick', function(event) { 
 	var resObj = $('#boxResultado');
 	if ( resObj.css("visibility") == "hidden" ) {
@@ -159,7 +179,7 @@ $('#divResultado').bind('vclick', function(event) {
 $('#botResultado').bind('vclick', function(event) { 
 	if ($("#inputResultado").val() == resString) {
 		if (subnivelAct == 5) {
-			alerta("Emaitza zuzena!\n<span style='color:green'>Maila " + nivelAct + " \ngainditu duzu!</span>");
+			alerta("Emaitza zuzena!<br /><br /><span style='color:green'>" + nivelAct + ". Maila<br />gainditu duzu!</span>");
 		} else {
 			alerta("Emaitza zuzena!");
 		}
@@ -170,7 +190,7 @@ $('#botResultado').bind('vclick', function(event) {
 		fallosTotNivel[nivelAct]++;
 		actualizarMarcador();
 		saveVars();
-		alerta("Emaitza ez da zuzena, \nsaiatu berriro.");
+		alerta("Emaitza ez da zuzena, <br />saiatu berriro.");
 	}
 });
 
@@ -365,6 +385,7 @@ function alerta(mensaje) {
 function saveVars() {
 	localStorage.setItem("subnivelesTot", subnivelesTot);
 	localStorage.setItem("fallosTot", fallosTot);
+	localStorage.setItem("idioma", idioma);
 	localStorage["nivelSuperado"] = JSON.stringify(nivelSuperado);
 	localStorage["subnivelesTotNivel"] = JSON.stringify(subnivelesTotNivel);
 	localStorage["fallosTotNivel"] = JSON.stringify(fallosTotNivel);
@@ -373,6 +394,7 @@ function saveVars() {
 function loadVars() {
 	subnivelesTot = localStorage.getItem("subnivelesTot");
 	fallosTot = localStorage.getItem("fallosTot");
+	idioma = localStorage.getItem("idioma");
 	if (localStorage["nivelSuperado"] != null) {
 		nivelSuperado = JSON.parse(localStorage["nivelSuperado"]);
 	}

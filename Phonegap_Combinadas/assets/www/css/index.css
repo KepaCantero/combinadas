@@ -11,10 +11,26 @@
 	background: transparent; 
 }
 
+@font-face {
+    font-family: "customfont";
+    src: url("../fonts/Dion.ttf") format("opentype");
+}
+
+body {
+    font-family: "customfont";
+}
 
 /******************/
 /*   inicioPage   */
 /******************/
+
+.titulo{
+	width: 100%;
+	font-family: "customfont";
+	font-size: 1.8em;
+	color: #3473a6;
+	text-align: center;
+}
 
 .boxBoton{
 	width: 50%;
@@ -32,8 +48,23 @@
 
 .ui-btn-inner { 
 	white-space: normal !important; 
-	font-size: 1.2em;
-	line-height: 1.8em;
+	font-family: "customfont";
+	font-size: 1.8em;
+}
+
+#tituloIdioma {
+	margin-top: 30px;
+}
+
+#radioIdioma {
+	width: 100%;
+	text-align: center;
+}
+
+#radioIdioma .ui-btn-inner { 
+	font-family: "customfont";
+	color: #3473a6;
+	font-size: 1.6em;
 }
 
 
@@ -59,34 +90,36 @@
     width: 92%;
     margin-left: 4%;
     margin-right: 4%;
-    font-size: 1.4em;
+    font-size: 1.6em;
     font-weight: 650;
+    font-family: "customfont";
     line-height: 1.8em; /*Este valor es la altura del contenedor menos la mitad del tamaño de la fuente*/
     color: white;
     text-align: center;
 }
 
 #listaNiveles li{
-	font-size: 1.1em;
-	line-height: 1.8em;
+	font-family: "customfont";
+	font-size: 1.3em;
+	line-height: 2em;
 }
 
 .contLi {
 	width: 100%;
-	height: 1.8em;
+	height: 2em;
 }
 
 .li-izq {
 	width: 50%;
-	font-size: 1.1em;
-	line-height: 1.8em;
+	font-size: 1.3em;
+	line-height: 2em;
 	float: left;
 }
 
 .li-ctr {
 	width: 30%;
-	font-size: 1.1em;
-	line-height: 1.8em;
+	font-size: 1.3em;
+	line-height: 2em;
 	text-align: center;
 	color: green;
 	float: left;
@@ -94,8 +127,8 @@
 
 .li-dch {
 	width: 20%;
-	font-size: 1.1em;
-	line-height: 1.8em;
+	font-size: 1.3em;
+	line-height: 2em;
 	text-align: center;
 	float: left;
 }
@@ -120,7 +153,8 @@
 #cab-izq{
 	width: 46%;
 	margin-left: 4%;
-	font-size: 1.4em;
+	font-family: "customfont";
+	font-size: 1.6em;
 	font-weight: 650;
 	line-height: 1.8em; /*Este valor es la altura del contenedor menos la mitad del tamaño de la fuente*/
 	color: white;
@@ -131,7 +165,8 @@
 #cab-dch{
 	width: 46%;
 	margin-right: 4%;
-	font-size: 1.4em;
+	font-family: "customfont";
+	font-size: 1.6em;
 	font-weight: 650;
 	line-height: 1.8em; /*Este valor es la altura del contenedor menos la mitad del tamaño de la fuente*/
 	color: white;
@@ -153,7 +188,8 @@
 	background-image:-o-linear-gradient(#ffea9f,#fed942);
 	background-image:linear-gradient(#ffea9f,#fed942);
 	color: #004371;
-	font-size: 1.5em;
+	font-family: "customfont";
+	font-size: 1.9em;
 	font-weight: 650;
 	text-align: center;
 	border-radius: 15px;
@@ -164,7 +200,10 @@
 }
 
 #inputPruebas{
-	font-size: 1.2em;
+	font-family: "customfont";
+	color: #3473a6;
+	font-size: 1.6em;
+	text-align: center;
 }
 
 #divResultado{
@@ -175,7 +214,8 @@
 #boxResultado{
 	width: 100%;
 	height: 50%;
-	font-size: 1.4em;
+	font-family: "customfont";
+	font-size: 1.8em;
 	color: #3473a6;
 	text-align: center;
 	visibility: hidden;
@@ -189,8 +229,9 @@
 }
 
 #inputResultado{
+	font-family: "customfont";
 	text-align: center;
-	font-size: 1.7em;
+	font-size: 2em;
 	font-weight: bold;
-	color: blue;
+	color: #3473a6;
 }

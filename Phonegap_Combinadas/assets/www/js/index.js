@@ -41,7 +41,8 @@ var subnivelesTotNivel = []; //Subniveles totales jugados en este nivel (para la
 var fallosAct = parseInt("0"); //Fallos cometidos en los subniveles de este nivel
 var fallosTot = parseInt("0"); //Fallos cometidos en total (para las estadísticas)
 var fallosTotNivel = []; //Fallos totales cometidos en este nivel (para las estadísticas)
-
+var fallosSubnivel = []; //True o False para cada subnivel. Hace que no se cuente más de un fallo por subnivel
+var porcentajeNivel = []; //De donde salen las estadísticas. Solo se guarda si es mayor que el valor previo
 
 /////////////////////
 //EVENTOS AL INICIO//
@@ -90,20 +91,21 @@ $('#listaPage').bind('pagebeforeshow', function(event) {
 
     var elListaNiveles = $('#listaNiveles');
     
-    for ( var i = 0; i < 13; i++) {
+    for ( var i = 1; i < 13; i++) {
     	
     	$("#li-izq-" + i).html( i + ". Maila");
     	
-    	if ( subnivelesTotNivel[i] != null && subnivelesTotNivel[i] != 0) {
-	    	var porcentaje = parseFloat( (100 - (fallosTotNivel[i] * 100 / subnivelesTotNivel[i])) ).toFixed(2);
+    	if ( porcentajeNivel[i] != null && porcentajeNivel[i] != 0) {
+	    	/*var porcentaje = parseFloat( (100 - (fallosTotNivel[i] * 100 / subnivelesTotNivel[i])) ).toFixed(2);
 	    	if ( (porcentaje*100) % 100 == 0) { //Si el resultado es entero
 				porcentaje = porcentaje.toString();
 				porcentaje = porcentaje.split(".00").join("");
-			}
+			}*/
+			var porcentaje = parseFloat( porcentajeNivel[i] );
 	    	$("#li-ctr-" + i).html( porcentaje + "%");
-	    	if (porcentaje < 50) {
+	    	if (porcentaje < 80) {
 	    		$("#li-ctr-" + i).css("color", "red");
-	    	} else if (porcentaje >= 50 && porcentaje < 85) {
+	    	} else if (porcentaje >= 80 && porcentaje < 100) {
 	    		$("#li-ctr-" + i).css("color", "orange");
 	    	} else {
 	    		$("#li-ctr-" + i).css("color", "green");
@@ -114,8 +116,10 @@ $('#listaPage').bind('pagebeforeshow', function(event) {
     	
     	if (nivelSuperado[i] == true) {
     		$("#li-dch-" + i).html("<img src='img/check.png'>");
+    		//$("#li-" + (i+1)).removeClass("disabled-li");
     	} else {
     		$("#li-dch-" + i).html("");
+    		//$("#li-" + (i+1)).addClass("disabled-li");
     	}
     }
     
@@ -153,8 +157,8 @@ $('#estadisticasPage').bind('pagebeforeshow', function(event) {
 	$("#cab-dentro-estadisticas").html("ESTATISTIKAK");
 	
 	$("#est-izq-1").html("Gainditutako mailak");
-	$("#est-izq-2").html("Akatsik gabeko gainditutako eragiketen portzentaila");
-	$("#est-izq-3").html("Totalezko gainditutako eragiketak");
+	$("#est-izq-2").html("Akatsik gabe gainditutako eragiketen portzentaila");
+	$("#est-izq-3").html("Totalean gainditutako eragiketak");
 	$("#est-izq-4").html("Totalezko akatsak");
 	
 	//Estadística 1 (Niveles superados)
@@ -232,17 +236,52 @@ $('#divResultado').bind('vclick', function(event) {
 $('#botResultado').bind('vclick', function(event) { 
 	if ($("#inputResultado").val() == resString) {
 		if (subnivelAct == 5) {
-			alerta("Emaitza zuzena!<br /><br /><span style='color:green'>" + nivelAct + ". Maila<br />gainditu duzu!</span>");
+			if (fallosAct < 2) {
+				alerta("Emaitza zuzena!<br /><br /><span style='color:green'>" + nivelAct + ". Maila<br />gainditu duzu!</span>");
+				var porcent = (5 - fallosAct) * 20;
+				if (porcent > porcentajeNivel[nivelAct] || porcentajeNivel[nivelAct] == null) { 
+					porcentajeNivel[nivelAct] = parseFloat(porcent);
+				}
+				proxSubnivel();
+			} else { //Aquí se ha fallado más de lo permitido. No se va a proxSubnivel(), sino que las variables se resetean y se sale a la lista
+				var porcent = (5 - fallosAct) * 20;
+				if (porcent > porcentajeNivel[nivelAct]) { 
+					porcentajeNivel[nivelAct] = parseFloat(porcent);
+				}
+				//alerta("Emaitza zuzena!<br /><br /><span style='color:red'>Zoritzarrez, " + fallosAct + " akats egin dituzu,<br />eta behin bakarrik huts egin dezakezu.</span>");
+				$("#combinadasPage").simpledialog2({ 
+			        theme: 'b',
+			        mode: 'blank',
+			        animate: false,
+			        showModal: false,
+			        blankContent : "<div style='padding:15px;'>" +              
+			            "<h2 style='text-align:center;'>" + 
+			            "Emaitza zuzena!<br /><br /><span style='color:red'>Zoritzarrez, " + fallosAct + " akats egin dituzu,<br />eta behin bakarrik huts egin dezakezu.</span>" + 
+			            "</h2>" + 
+			            "<a rel='close' onclick='atras()' data-role='button' href='#'>Onartu</a>" +
+			            "</div>"
+			    });
+				subnivelesTot++;
+				subnivelesTotNivel[nivelAct]++;
+				fallosAct = 0;
+				subnivelAct = 1;
+				fallosSubnivel = [];
+				saveVars();
+				//$.mobile.changePage($("#listaPage"));
+			}			
 		} else {
 			alerta("Emaitza zuzena!");
+			proxSubnivel();
 		}
-		proxSubnivel();
 	} else {
-		fallosAct++;
-		fallosTot++;
-		fallosTotNivel[nivelAct]++;
-		actualizarMarcador();
-		saveVars();
+		if (fallosSubnivel[subnivelAct] != true) {
+			fallosSubnivel[subnivelAct] = true;
+			fallosAct++;
+			fallosTot++;
+			fallosTotNivel[nivelAct]++;
+			actualizarMarcador();
+			saveVars();
+		}
 		alerta("<span style='color:red'>Emaitza ez da zuzena, <br />saiatu berriro.<span>");
 	}
 });
@@ -251,7 +290,7 @@ $('#botBorrarEst').bind('vclick', function(event) {
 	$('<div>').simpledialog2({
 	    mode: 'button',
 	    animate: false,
-	    buttonPrompt: "Ziur zaude estatistika guztiak ezabatu nahi duzula? <br />Aurrerapen guztiak galduko dituzu.",
+	    buttonPrompt: "Ziur zaude estatistika guztiak ezabatu nahi dituzula? <br />Aurrerapen guztiak galduko dituzu.",
 	    buttons : {
 	        'Bai': {
 		        click: function () { 
@@ -260,9 +299,10 @@ $('#botBorrarEst').bind('vclick', function(event) {
 					subnivelesTotNivel = [];
 					fallosTot = parseInt("0");
 					fallosTotNivel = [];
+					porcentajeNivel = [];
 					$("#est-dch-2").html(""); //Deja en blanco la segunda estadística, que por algún motivo no pierde su valor.
 					saveVars();
-					$.mobile.changePage($("#inicioPage"));
+					atras();
 		        }
 	        },
 	        'Ez': {
@@ -288,6 +328,12 @@ function mostrarNivel(){
 	}
 	if (subnivelesTotNivel[nivelAct] == null) {
 		subnivelesTotNivel[nivelAct] = parseInt("0");
+	}
+	if (porcentajeNivel[nivelAct] == null) {
+		porcentajeNivel[nivelAct] = parseInt("0");	
+	}	
+	if (fallosSubnivel[subnivelAct] == null) {
+		fallosSubnivel[subnivelAct] = false;
 	}
 	cargarVariables();
 	getOperacion();
@@ -412,7 +458,13 @@ function actualizarMarcador(){
 	} else {
 		$("#cab-izq").html("Maila: " + nivelAct + " - n");
 	}
-	$("#cab-dch").html("Akatsak: " + fallosAct);	
+	if (fallosAct == 0) {
+		$("#cab-dch").html("Akatsak: " + fallosAct);
+	} else if (fallosAct == 1) {
+		$("#cab-dch").html("Akatsak: <span style='color:orange'>" + fallosAct + "</span>");
+	} else {
+		$("#cab-dch").html("Akatsak: <span style='color:red'>" + fallosAct + "</span>");
+	}
 }
 
 function proxSubnivel(){
@@ -429,6 +481,7 @@ function proxSubnivel(){
 				subnivelesTotNivel[nivelAct]++;
 				fallosAct = 0;
 				subnivelAct = 1;
+				fallosSubnivel = [];
 				saveVars();
 				alerta("ZORIONAK!\n Azken maila gainditu duzu!");
 				$.mobile.changePage($("#listaPage"));			
@@ -439,6 +492,7 @@ function proxSubnivel(){
 				nivelAct++;
 				fallosAct = 0;
 				subnivelAct = 1;
+				fallosSubnivel = [];
 				saveVars();
 			}
 		}
@@ -463,6 +517,10 @@ function alerta(mensaje) {
     });
 }
 
+function atras() {
+	history.back();
+}
+
 function saveVars() {
 	localStorage.setItem("subnivelesTot", subnivelesTot);
 	localStorage.setItem("fallosTot", fallosTot);
@@ -470,6 +528,7 @@ function saveVars() {
 	localStorage["nivelSuperado"] = JSON.stringify(nivelSuperado);
 	localStorage["subnivelesTotNivel"] = JSON.stringify(subnivelesTotNivel);
 	localStorage["fallosTotNivel"] = JSON.stringify(fallosTotNivel);
+	localStorage["porcentajeNivel"] = JSON.stringify(porcentajeNivel);
 }
 
 function loadVars() {
@@ -484,6 +543,9 @@ function loadVars() {
 	}
 	if (localStorage["fallosTotNivel"] != null) {
 		fallosTotNivel = JSON.parse(localStorage["fallosTotNivel"]);
+	}
+	if (localStorage["porcentajeNivel"] != null) {
+		porcentajeNivel = JSON.parse(localStorage["porcentajeNivel"]);
 	}
 }
 

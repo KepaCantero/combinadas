@@ -134,6 +134,10 @@ body {
 	float: left;
 }
 
+.disabled-li {
+	background: #999999;
+}
+
 /**********************/
 /*   combinadasPage   */
 /**********************/

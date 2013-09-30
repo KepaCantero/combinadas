@@ -73,6 +73,19 @@ body {
 /*   listaPage   */
 /*****************/
 
+.cabecera{
+	width: 100%;
+	height: 2.5em;
+	/*background-color: #3473a6;*/
+	text-shadow:0 1px 0 #000fff;
+	background-image:-webkit-gradient(linear,left top,left bottom,from(#5698c8),to(#336fab));
+	background-image:-webkit-linear-gradient(#5698c8,#336fab);
+	background-image:-moz-linear-gradient(#5698c8,#336fab);
+	background-image:-ms-linear-gradient(#5698c8,#336fab);
+	background-image:-o-linear-gradient(#5698c8,#336fab);
+	background-image:linear-gradient(#5698c8,#336fab);
+}
+
 #cabecera-lista{
 	width: 100%;
 	height: 2.5em;
@@ -97,6 +110,25 @@ body {
     line-height: 1.8em; /*Este valor es la altura del contenedor menos la mitad del tamaño de la fuente*/
     color: white;
     text-align: center;
+}
+
+.barraBotones {
+	margin-top: -1em;
+}
+
+.barra-izq {
+	width: 50%;
+	float: left;
+}
+
+.barra-dch {
+	width: 50%;
+	float: left;
+}
+
+.ui-icon {
+	background-color: transparent; 
+	box-shadow: none;
 }
 
 #listaNiveles li{
@@ -294,7 +326,7 @@ body {
 	float: left;
 }
 
-#limpiador {
+.limpiador {
 	clear: both;
 }
 

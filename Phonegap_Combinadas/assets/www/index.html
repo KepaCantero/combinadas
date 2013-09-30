@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>Combinadas</title>
+		<title>KONBOKETAK</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1"/>
 
 		<link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.3.1.min.css" />
@@ -23,19 +23,19 @@
 	    	<div data-role="content">
 	    		
 	    		<div class="boxBoton2">
-    				<div class="titulo">JOLASTU</div>
+    				<div id="tituloJolastu" class="titulo"></div>
 					
 					<div id="botonesJuego" data-role=controlgroup>
-						<input id="botModo1" data-theme=b type=button value="Maila guztiak" />
-						<input id="botModo2" data-theme=b type=button value="Maila bat bakarrik" />
+						<input id="botModo1" data-theme=b type=button />
+						<input id="botModo2" data-theme=b type=button />
 					</div>
 				</div>
 				
 				<div class="boxBoton2">
-					<input id="botEstadisticas" data-theme=e type=button value="Estatistikak" />
+					<input id="botEstadisticas" data-theme=e type=button />
 				</div>
 				
-				<div id="tituloIdioma" class="titulo">HIZKUNTZA</div>
+				<div id="tituloIdioma" class="titulo"></div>
 				
 				<div id="radioIdioma" data-role="controlgroup" data-type="horizontal">
 			     	<label for="radioEU">EU</label>
@@ -50,93 +50,100 @@
 	    </div>
 	    
 	    <div id="listaPage" data-role="page"> <!--data-add-back-btn=true data-back-btn-text=" "-->
-	    	
-	    	<div id="cabecera-lista" data-role=header data-theme=b>
+			
+			<div id="cabecera-lista">
 	    	    <div id="cab-dentro-lista">
 	    	    </div>
 			</div>
 	    	
 	    	<div data-role="content">
+		    	
+		    	<div class="barraBotones">
+		    		<div class="barra-izq">
+		    			<input id="botAtrasLista" class="botBarra" type=button data-theme=b data-icon=arrow-l data-iconpos=notext />	    			
+		    		</div>
+		    		<div class="limpiador"></div>	    		
+		    	</div>
+		    
 		    	<ul id="listaNiveles" data-role="listview" data-dividertheme="e" data-inset="true" data-autodividers="true">
-		    		<!--<li data-role=list-divider>Biderketak</li>-->
-			        <li id="li-1" maila="1" tipo="Biderketak">  
+			        <li id="li-1" maila="1" >  
 			        	<div class="contLi">
 				        	<div id="li-izq-1" class="li-izq"></div>
 				        	<div id="li-ctr-1" class="li-ctr"></div>
 				        	<div id="li-dch-1" class="li-dch"></div>
 			        	</div>
 			        </li>
-			        <li id="li-2" maila="2" tipo="Biderketak">  
+			        <li id="li-2" maila="2" >  
 			        	<div class="contLi">
 				        	<div id="li-izq-2" class="li-izq"></div>
 				        	<div id="li-ctr-2" class="li-ctr"></div>
 				        	<div id="li-dch-2" class="li-dch"></div>
 			        	</div>
 			        </li>
-			        <li id="li-3" maila="3" tipo="Biderketak">  
+			        <li id="li-3" maila="3" >  
 			        	<div class="contLi">
 				        	<div id="li-izq-3" class="li-izq"></div>
 				        	<div id="li-ctr-3" class="li-ctr"></div>
 				        	<div id="li-dch-3" class="li-dch"></div>
 			        	</div>
 			        </li>
-			        <li id="li-4" maila="4" tipo="Biderketak">  
+			        <li id="li-4" maila="4" >  
 			        	<div class="contLi">
 				        	<div id="li-izq-4" class="li-izq"></div>
 				        	<div id="li-ctr-4" class="li-ctr"></div>
 				        	<div id="li-dch-4" class="li-dch"></div>
 			        	</div>
 			        </li>
-			        <li id="li-5" maila="5" tipo="Zatiketak">  
+			        <li id="li-5" maila="5" >  
 			        	<div class="contLi">
 				        	<div id="li-izq-5" class="li-izq"></div>
 				        	<div id="li-ctr-5" class="li-ctr"></div>
 				        	<div id="li-dch-5" class="li-dch"></div>
 			        	</div>
 			        </li>
-			        <li id="li-6" maila="6" tipo="Zatiketak">  
+			        <li id="li-6" maila="6" >  
 			        	<div class="contLi">
 				        	<div id="li-izq-6" class="li-izq"></div>
 				        	<div id="li-ctr-6" class="li-ctr"></div>
 				        	<div id="li-dch-6" class="li-dch"></div>
 			        	</div>
 			        </li>
-			        <li id="li-7" maila="7" tipo="Zatiketak">  
+			        <li id="li-7" maila="7" >  
 			        	<div class="contLi">
 				        	<div id="li-izq-7" class="li-izq"></div>
 				        	<div id="li-ctr-7" class="li-ctr"></div>
 				        	<div id="li-dch-7" class="li-dch"></div>
 			        	</div>
 			        </li>
-			        <li id="li-8" maila="8" tipo="Zatiketak">  
+			        <li id="li-8" maila="8" >  
 			        	<div class="contLi">
 				        	<div id="li-izq-8" class="li-izq"></div>
 				        	<div id="li-ctr-8" class="li-ctr"></div>
 				        	<div id="li-dch-8" class="li-dch"></div>
 			        	</div>
 			        </li>
-			        <li id="li-9" maila="9" tipo="Parentesiak">  
+			        <li id="li-9" maila="9" >  
 			        	<div class="contLi">
 				        	<div id="li-izq-9" class="li-izq"></div>
 				        	<div id="li-ctr-9" class="li-ctr"></div>
 				        	<div id="li-dch-9" class="li-dch"></div>
 			        	</div>
 			        </li>
-			        <li id="li-10" maila="10" tipo="Parentesiak">  
+			        <li id="li-10" maila="10" >  
 			        	<div class="contLi">
 				        	<div id="li-izq-10" class="li-izq"></div>
 				        	<div id="li-ctr-10" class="li-ctr"></div>
 				        	<div id="li-dch-10" class="li-dch"></div>
 			        	</div>
 			        </li>
-			        <li id="li-11" maila="11" tipo="Parentesiak">  
+			        <li id="li-11" maila="11" >  
 			        	<div class="contLi">
 				        	<div id="li-izq-11" class="li-izq"></div>
 				        	<div id="li-ctr-11" class="li-ctr"></div>
 				        	<div id="li-dch-11" class="li-dch"></div>
 			        	</div>
 			        </li>
-			        <li id="li-12" maila="12" tipo="Parentesiak">  
+			        <li id="li-12" maila="12" >  
 			        	<div class="contLi">
 				        	<div id="li-izq-12" class="li-izq"></div>
 				        	<div id="li-ctr-12" class="li-ctr"></div>
@@ -152,11 +159,23 @@
 				<div id="cab-izq"></div>
 				<div id="cab-dch"></div>
 			</div>
+						
 			<div data-role="content">
+				
+				<div class="barraBotones">
+		    		<div class="barra-izq">
+		    			<input id="botAtrasCombinadas" type=button data-theme=b data-icon=arrow-l data-iconpos=notext />	    			
+		    		</div>
+		    		<div id="barraDchCombinadas" class="barra-dch" align="right">
+		    			<input id="botSigCombinadas" type=button data-theme=b data-icon=arrow-r data-iconpos=notext />	    			
+		    		</div>
+		    		<div class="limpiador"></div>	    		
+		    	</div>
+				
 				<div id="boxOperacion"></div>
 				
 				<div class="boxInput">
-					<textarea id="inputPruebas" type="number" pattern="[0-9+-*/()[]]*" value="" placeholder="Egin hemen zure probak"></textarea>
+					<textarea id="inputPruebas" type="number" ></textarea>
 				</div>
 				
 				<div id="divResultado">
@@ -164,7 +183,7 @@
 				</div>
 				
 				<div id="boxInputResultado">
-					<input id="inputResultado" type="number" value="" placeholder="Emaitza" />
+					<input id="inputResultado" type="number" value="" />
 				</div>
 				
 				<div class="boxBoton">
@@ -186,6 +205,13 @@
 			</div>
 	    	
 	    	<div data-role="content">
+	    		
+	    		<div class="barraBotones">
+		    		<div class="barra-izq">
+		    			<input id="botAtrasEstadisticas" type=button data-theme=b data-icon=arrow-l data-iconpos=notext />	    			
+		    		</div>
+		    		<div class="limpiador"></div>	    		
+		    	</div>
 	    		
 	    		<div id="boxEstadisticas">
 	    			<div class="est-row">
@@ -216,11 +242,11 @@
 		    			</div>
 	    			</div>
 	    			
-	    			<div id="limpiador"></div>
+	    			<div class="limpiador"></div>
 	    		</div>
 	    	
 	    		<div class="boxBoton2">
-                    <input id="botBorrarEst" data-theme=b type="button" value="Ezabatu">
+                    <input id="botBorrarEst" data-theme=b type="button">
                 </div> 
 	    	
 	    	</div>

@@ -42,6 +42,7 @@ var fallosAct = parseInt("0"); //Fallos cometidos en los subniveles de este nive
 var fallosTot = parseInt("0"); //Fallos cometidos en total (para las estadísticas)
 var fallosTotNivel = []; //Fallos totales cometidos en este nivel (para las estadísticas)
 var fallosSubnivel = []; //True o False para cada subnivel. Hace que no se cuente más de un fallo por subnivel
+var falloModo2 = false; //Controla si hay error en el modo 2 para mostrar el botón a la siguiente cuenta
 var porcentajeNivel = []; //De donde salen las estadísticas. Solo se guarda si es mayor que el valor previo
 
 /////////////////////
@@ -392,8 +393,9 @@ $('#botResultado').bind('vclick', function(event) {
 			proxSubnivel();
 		}
 	} else {
-		if (fallosSubnivel[subnivelAct] != true) {
+		if (fallosSubnivel[subnivelAct] != true || falloModo2 != true) {
 			fallosSubnivel[subnivelAct] = true;
+			falloModo2 = true;
 			fallosAct++;
 			fallosTot++;
 			fallosTotNivel[nivelAct]++;
@@ -1129,4 +1131,5 @@ function reset() {
 	$('#inputPruebas').css("height", "2em");
 	$("#inputResultado").val("");
 	$('#barraDchCombinadas').css("visibility", "hidden");
+	falloModo2 = false;
 }

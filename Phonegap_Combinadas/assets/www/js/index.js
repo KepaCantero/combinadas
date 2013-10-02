@@ -64,6 +64,12 @@ $('#inicioPage').bind('pagebeforeshow', function(event) {
 
 	loadVars();
 
+    if (idioma == null) {
+        idioma = "EU";
+    }
+    /*$.getScript( "js/lang." + idioma + ".js", function( data, textStatus, jqxhr ) {
+    });*/
+
     if ($.mobile.sdCurrentDialog != null) {
         $.mobile.sdCurrentDialog.close();
     }
@@ -76,20 +82,17 @@ $('#inicioPage').bind('pagebeforeshow', function(event) {
 		fallosTot = parseInt("0");
 	}	
     
-    if (idioma == null) {
-    	idioma = "EU";
-    }
-    
     $('input[name="radio"]').filter('[value=' + idioma + ']').attr('checked', true).checkboxradio("refresh");;
     
     $('#botModo1').siblings('.ui-btn-inner').children('.ui-btn-text').text("Maila guztiak");
+    //$('#botModo1').siblings('.ui-btn-inner').children('.ui-btn-text').text(lang.greeting);
     $('#botModo2').siblings('.ui-btn-inner').children('.ui-btn-text').text("Maila bat bakarrik");
     $('#botEstadisticas').siblings('.ui-btn-inner').children('.ui-btn-text').text("Estatistikak");
     $('#botResultados').siblings('.ui-btn-inner').children('.ui-btn-text').text("Azken emaitzak");
     
     $('#tituloJolastu').html("JOLASTU");
     $('#tituloIdioma').html("HIZKUNTZA");
-    
+    alert("comienzo");
 });
 
 $('#listaPage').bind('pagebeforeshow', function(event) {
@@ -286,7 +289,13 @@ $('#botResultados').bind('vclick', function(event) {
 });
 
 $('#radioIdioma').bind('change', function(event) {
-    idioma = $('input[name=radio]:checked').val();
+    if ( idioma != $('input[name=radio]:checked').val() ) {
+        idioma = $('input[name=radio]:checked').val();
+        $.getScript( "js/lang." + idioma + ".js", function( data, textStatus, jqxhr ) {
+            //alert(lang.greeting + " " + idioma);
+            $.mobile.changePage($("#inicioPage"));
+        });
+    }    
     saveVars();
 });
 

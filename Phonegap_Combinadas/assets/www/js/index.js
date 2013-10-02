@@ -43,7 +43,13 @@ var fallosTot = parseInt("0"); //Fallos cometidos en total (para las estadística
 var fallosTotNivel = []; //Fallos totales cometidos en este nivel (para las estadísticas)
 var fallosSubnivel = []; //True o False para cada subnivel. Hace que no se cuente más de un fallo por subnivel
 var falloModo2 = false; //Controla si hay error en el modo 2 para mostrar el botón a la siguiente cuenta
+var porcent = parseInt("0"); //Guarda el último porcentaje obtenido (para poder recogerlo desde resultadosPage)
 var porcentajeNivel = []; //De donde salen las estadísticas. Solo se guarda si es mayor que el valor previo
+var meses=["Urt","Ots","Mar","Api","Mai","Eka","Uzt","Abu","Ira","Urr","Aza","Abe"];
+var stackFecha = []; //Guarda en una posición del 1 al 25 la fecha del último nivel jugado (para resultadosPage)
+var stackNiv = []; //Guarda en una posición del 1 al 25 el último nivel jugado (para resultadosPage)
+var stackPorc = []; //Guarda en una posición del 1 al 25 el porcentaje de acierto del último nivel jugado (para resultadosPage)
+
 
 /////////////////////
 //EVENTOS AL INICIO//
@@ -79,6 +85,7 @@ $('#inicioPage').bind('pagebeforeshow', function(event) {
     $('#botModo1').siblings('.ui-btn-inner').children('.ui-btn-text').text("Maila guztiak");
     $('#botModo2').siblings('.ui-btn-inner').children('.ui-btn-text').text("Maila bat bakarrik");
     $('#botEstadisticas').siblings('.ui-btn-inner').children('.ui-btn-text').text("Estatistikak");
+    $('#botResultados').siblings('.ui-btn-inner').children('.ui-btn-text').text("Azken emaitzak");
     
     $('#tituloJolastu').html("JOLASTU");
     $('#tituloIdioma').html("HIZKUNTZA");
@@ -92,7 +99,7 @@ $('#listaPage').bind('pagebeforeshow', function(event) {
     }
 
 	if (modoJuego == 1) {
-		$("#cab-dentro-lista").html("MODU ARRUNTA");
+		$("#cab-dentro-lista").html("MAILA GUZTIAK");
 	} else {
 		$("#cab-dentro-lista").html("MAILA BAT BAKARRIK");
 	}
@@ -127,19 +134,22 @@ $('#listaPage').bind('pagebeforeshow', function(event) {
 	    		$("#li-ctr-" + i).css("color", "green");
 	    	}
     	} else {
-    		$("#li-ctr-" + i).html("");
+    		$("#li-ctr-" + i).html("&nbsp;&nbsp;&nbsp;&nbsp;");
     	}
     	
     	if (nivelSuperado[i] == true) {
-    		$("#li-dch-" + i).html("<img src='img/check.png'>");
-    		//$("#li-" + (i+1)).removeClass("disabled-li");
-    	} else {
+    		$("#li-" + i).removeClass("disabled-li");
+    		$("#li-dch-" + i).html("<img src='img/check.png'>");    		
+    	} else if (nivelSuperado[i-1] == true || i == 1) {
+    		$("#li-" + i).removeClass("disabled-li");
     		$("#li-dch-" + i).html("");
-    		//$("#li-" + (i+1)).addClass("disabled-li");
+    	} else {
+    		$("#li-" + i).addClass("disabled-li");
+    		$("#li-dch-" + i).html("<img src='img/lock.png'>");
     	}
     }
     
-    elListaNiveles.children('li').bind('vclick', function(e) {
+    elListaNiveles.children('li:not(.disabled-li)').bind('vclick', function(e) {
 		e.preventDefault(); 
 		e.stopImmediatePropagation(); 
 		$('#listaNiveles').children('li').unbind('vclick');
@@ -162,7 +172,7 @@ $('#listaPage').bind('pagebeforeshow', function(event) {
 $('#combinadasPage').bind('pagebeforeshow', function(event) {
 	$('#inputPruebas').elastic();
 	$("#botResultado").button('disable');
-	$('#barraDchCombinadas').css("visibility", "hidden");
+	$('#barra-dch-combinadas').css("visibility", "hidden");
 	
 	$("#inputPruebas").attr("placeholder", "Egin hemen zure probak");
 	$("#inputResultado").attr("placeholder", "Emaitza");
@@ -215,6 +225,36 @@ $('#estadisticasPage').bind('pagebeforeshow', function(event) {
 	$("#est-dch-4").html(fallosTot);
 });
 
+$('#resultadosPage').bind('pagebeforeshow', function(event) {
+
+	$("#cab-dentro-resultados").html("AZKEN EMAITZAK");
+
+	var listResultados = "";
+    $('#listaResultados li').remove();
+    
+    listResultados+= "<li data-role=list-divider>" +
+	    	"<div class='contRes'>" +
+	        	"<div class='res-izq'><span style='color:white;font-weight:bold'>Data<span></div>" +
+	        	"<div class='res-ctr'><span style='color:white;font-weight:bold'>Maila<span></div>" +
+	        	"<div class='res-dch'><span style='color:white;font-weight:bold'>%<span></div>" +
+	    	"</div>" +
+	    "</li>";
+    
+    for ( var i = 1; i < stackNiv.length; i++) {
+		listResultados +=
+			"<li id='res-" + i +"'>" +
+	        	"<div class='contRes'>" +
+	        		"<div id='res-izq-" + i + "' class='res-izq'>" + stackFecha[i] + "</div>" +
+		        	"<div id='res-ctr-" + i + "' class='res-ctr'>" + stackNiv[i] + "</div>" +
+		        	"<div id='res-dch-" + i + "' class='res-dch'>" + stackPorc[i] + "%</div>" +
+	        	"</div>" +
+	        "</li>";
+    }
+	
+	$('#listaResultados').append(listResultados).listview('refresh');
+
+});
+
 
 ///////////////
 // LISTENERS //
@@ -234,24 +274,32 @@ $('#botEstadisticas').bind('vclick', function(event) {
     $.mobile.changePage($("#estadisticasPage"));
 });
 
+$('#botResultados').bind('vclick', function(event) {
+    $.mobile.changePage($("#resultadosPage"));
+});
+
 $('#radioIdioma').bind('change', function(event) {
     idioma = $('input[name=radio]:checked').val();
     saveVars();
 });
 
-$('#botAtrasLista').bind('vclick', function(event) { 
+$('#barra-izq-lista').bind('vclick', function(event) { 
 	history.back();
 });
 
-$('#botAtrasCombinadas').bind('vclick', function(event) { 
+$('#barra-izq-combinadas').bind('vclick', function(event) { 
 	history.back();
 });
 
-$('#botAtrasEstadisticas').bind('vclick', function(event) { 
+$('#barra-izq-estadisticas').bind('vclick', function(event) { 
 	history.back();
 });
 
-$('#botSigCombinadas').bind('vclick', function(event) { 
+$('#barra-izq-resultados').bind('vclick', function(event) { 
+	history.back();
+});
+
+$('#barra-dch-combinadas').bind('vclick', function(event) { 
 	if (subnivelAct == 5) {
 		if (fallosAct < 2) {
 			if (nivelAct == 12) {
@@ -275,14 +323,15 @@ $('#botSigCombinadas').bind('vclick', function(event) {
 				saveVars();
 			} else {
 				alerta("<span style='color:green'>" + nivelAct + ". Maila<br />gainditu duzu!</span>");
-				var porcent = (5 - fallosAct) * 20;
+				porcent = (5 - fallosAct) * 20;
 				if (porcent > porcentajeNivel[nivelAct] || porcentajeNivel[nivelAct] == null) { 
 					porcentajeNivel[nivelAct] = parseFloat(porcent);
 				}
+				actualizarStack();
 				proxSubnivel();
 			}
 		} else { //Aquí se ha fallado más de lo permitido. No se va a proxSubnivel(), sino que las variables se resetean y se sale a la lista
-			var porcent = (5 - fallosAct) * 20;
+			porcent = (5 - fallosAct) * 20;
 			if (porcent > porcentajeNivel[nivelAct]) { 
 				porcentajeNivel[nivelAct] = parseFloat(porcent);
 			}
@@ -298,6 +347,7 @@ $('#botSigCombinadas').bind('vclick', function(event) {
 		            "<a rel='close' onclick='atras()' data-role='button' href='#'>Onartu</a>" +
 		            "</div>"
 		    });
+		    actualizarStack();
 			subnivelesTot++;
 			subnivelesTotNivel[nivelAct]++;
 			fallosAct = 0;
@@ -308,6 +358,7 @@ $('#botSigCombinadas').bind('vclick', function(event) {
 	} else {
 		proxSubnivel();
 	}
+	butDisable();
 });
 
 $('#divResultado').bind('vclick', function(event) { 
@@ -357,14 +408,15 @@ $('#botResultado').bind('vclick', function(event) {
 					saveVars();
 				} else {
 					alerta("Emaitza zuzena!<br /><br /><span style='color:green'>" + nivelAct + ". Maila<br />gainditu duzu!</span>");
-					var porcent = (5 - fallosAct) * 20;
+					porcent = (5 - fallosAct) * 20;
 					if (porcent > porcentajeNivel[nivelAct] || porcentajeNivel[nivelAct] == null) { 
 						porcentajeNivel[nivelAct] = parseFloat(porcent);
 					}
+					actualizarStack();
 					proxSubnivel();
 				}
 			} else { //Aquí se ha fallado más de lo permitido. No se va a proxSubnivel(), sino que las variables se resetean y se sale a la lista
-				var porcent = (5 - fallosAct) * 20;
+				porcent = (5 - fallosAct) * 20;
 				if (porcent > porcentajeNivel[nivelAct]) { 
 					porcentajeNivel[nivelAct] = parseFloat(porcent);
 				}
@@ -380,13 +432,13 @@ $('#botResultado').bind('vclick', function(event) {
 			            "<a rel='close' onclick='atras()' data-role='button' href='#'>Onartu</a>" +
 			            "</div>"
 			    });
+			    actualizarStack();
 				subnivelesTot++;
 				subnivelesTotNivel[nivelAct]++;
 				fallosAct = 0;
 				subnivelAct = 1;
 				fallosSubnivel = [];
 				saveVars();
-				//$.mobile.changePage($("#listaPage"));
 			}			
 		} else {
 			alerta("Emaitza zuzena!");
@@ -401,7 +453,7 @@ $('#botResultado').bind('vclick', function(event) {
 			fallosTotNivel[nivelAct]++;
 			actualizarMarcador();
 			saveVars();
-			$('#barraDchCombinadas').css("visibility", "visible");
+			$('#barra-dch-combinadas').css("visibility", "visible");
 		}
 		alerta("<span style='color:red'>Emaitza ez da zuzena, <br />saiatu berriro.<span>");
 	}
@@ -411,27 +463,33 @@ $('#botBorrarEst').bind('vclick', function(event) {
 	$('<div>').simpledialog2({
 	    mode: 'button',
 	    animate: false,
-	    buttonPrompt: "Ziur zaude estatistika guztiak ezabatu nahi dituzula? <br />Aurrerapen guztiak galduko dituzu.",
+	    buttonPrompt: "<span style='color:red'>Ziur zaude estatistika guztiak ezabatu nahi dituzula? <br />Aurrerapen guztiak galduko dituzu.<span>",
 	    buttons : {
 	        'Bai': {
 		        click: function () { 
 		            nivelSuperado = [];
+		            nivelSuperado[0] = false;
+		            nivelSuperado[1] = false;
 					subnivelesTot = parseInt("0");
 					subnivelesTotNivel = [];
 					fallosTot = parseInt("0");
 					fallosTotNivel = [];
 					porcentajeNivel = [];
+					stackNiv = [];
+					stackPorc = [];
+					stackFecha = [];
 					$("#est-dch-2").html(""); //Deja en blanco la segunda estadística, que por algún motivo no pierde su valor.
 					saveVars();
 					atras();
-		        }
+		        },
+		    icon: ""
 	        },
 	        'Ez': {
 		        click: function () { 
 		            $('#buttonoutput').text('Cancel');
 		        },
-		    icon: "delete",
-	        theme: "c"
+	        theme: "e",
+	        icon: ""
 	        }
 	    }
 	});
@@ -635,6 +693,29 @@ function butDisable() {
 	$("#botResultado").button('disable');
 }
 
+function actualizarStack() {
+	var lim;
+	
+	var dateObj = new Date();
+	var month = dateObj.getUTCMonth(); 
+	var day = dateObj.getUTCDate();
+	
+	if (stackNiv.length > 25) {
+		lim = 25;
+	} else {
+		lim = stackNiv.length;
+	}
+	
+	for (var i = lim; i > 1; i--) {
+		stackFecha[i] = stackFecha[i-1];
+		stackNiv[i] = stackNiv[i-1];
+		stackPorc[i] = stackPorc[i-1];
+	}
+	stackFecha[1] = meses[month] + " / " + day;
+	stackNiv[1] = nivelAct;
+	stackPorc[1] = porcent;
+}
+
 function saveVars() {
 	localStorage.setItem("subnivelesTot", subnivelesTot);
 	localStorage.setItem("fallosTot", fallosTot);
@@ -643,6 +724,9 @@ function saveVars() {
 	localStorage["subnivelesTotNivel"] = JSON.stringify(subnivelesTotNivel);
 	localStorage["fallosTotNivel"] = JSON.stringify(fallosTotNivel);
 	localStorage["porcentajeNivel"] = JSON.stringify(porcentajeNivel);
+	localStorage["stackFecha"] = JSON.stringify(stackFecha);
+	localStorage["stackNiv"] = JSON.stringify(stackNiv);
+	localStorage["stackPorc"] = JSON.stringify(stackPorc);
 }
 
 function loadVars() {
@@ -660,6 +744,15 @@ function loadVars() {
 	}
 	if (localStorage["porcentajeNivel"] != null) {
 		porcentajeNivel = JSON.parse(localStorage["porcentajeNivel"]);
+	}
+	if (localStorage["stackFecha"] != null) {
+		stackFecha = JSON.parse(localStorage["stackFecha"]);
+	}
+	if (localStorage["stackNiv"] != null) {
+		stackNiv = JSON.parse(localStorage["stackNiv"]);
+	}
+	if (localStorage["stackPorc"] != null) {
+		stackPorc = JSON.parse(localStorage["stackPorc"]);
 	}
 }
 
@@ -1130,6 +1223,6 @@ function reset() {
 	$("#inputPruebas").val("");
 	$('#inputPruebas').css("height", "2em");
 	$("#inputResultado").val("");
-	$('#barraDchCombinadas').css("visibility", "hidden");
+	$('#barra-dch-combinadas').css("visibility", "hidden");
 	falloModo2 = false;
 }

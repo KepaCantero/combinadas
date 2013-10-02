@@ -22,17 +22,16 @@
 	    <div id="inicioPage" data-role="page">
 	    	<div data-role="content">
 	    		
-	    		<div class="boxBoton2">
-    				<div id="tituloJolastu" class="titulo"></div>
-					
-					<div id="botonesJuego" data-role=controlgroup>
-						<input id="botModo1" data-theme=b type=button />
-						<input id="botModo2" data-theme=b type=button />
-					</div>
+				<div id="tituloJolastu" class="titulo"></div>
+				
+				<div id="botonesJuego" data-role=controlgroup>
+					<input id="botModo1" data-theme=b type=button />
+					<input id="botModo2" data-theme=b type=button />
 				</div>
 				
-				<div class="boxBoton2">
+				<div class="boxBoton2" data-role=controlgroup>
 					<input id="botEstadisticas" data-theme=e type=button />
+					<input id="botResultados" data-theme=e type=button />
 				</div>
 				
 				<div id="tituloIdioma" class="titulo"></div>
@@ -59,7 +58,7 @@
 	    	<div data-role="content">
 		    	
 		    	<div class="barraBotones">
-		    		<div class="barra-izq">
+		    		<div id="barra-izq-lista" class="barra-izq">
 		    			<input id="botAtrasLista" class="botBarra" type=button data-theme=b data-icon=arrow-l data-iconpos=notext />	    			
 		    		</div>
 		    		<div class="limpiador"></div>	    		
@@ -163,10 +162,10 @@
 			<div data-role="content">
 				
 				<div class="barraBotones">
-		    		<div class="barra-izq">
+		    		<div id="barra-izq-combinadas" class="barra-izq">
 		    			<input id="botAtrasCombinadas" type=button data-theme=b data-icon=arrow-l data-iconpos=notext />	    			
 		    		</div>
-		    		<div id="barraDchCombinadas" class="barra-dch" align="right">
+		    		<div id="barra-dch-combinadas" class="barra-dch" align="right">
 		    			<input id="botSigCombinadas" type=button data-theme=b data-icon=arrow-r data-iconpos=notext />	    			
 		    		</div>
 		    		<div class="limpiador"></div>	    		
@@ -207,7 +206,7 @@
 	    	<div data-role="content">
 	    		
 	    		<div class="barraBotones">
-		    		<div class="barra-izq">
+		    		<div id="barra-izq-estadisticas" class="barra-izq">
 		    			<input id="botAtrasEstadisticas" type=button data-theme=b data-icon=arrow-l data-iconpos=notext />	    			
 		    		</div>
 		    		<div class="limpiador"></div>	    		
@@ -251,6 +250,32 @@
 	    	
 	    	</div>
 	    	
+	    </div>
+
+		<div id="resultadosPage" data-role="page"> <!--data-add-back-btn=true data-back-btn-text=" "-->
+			
+			<div id="cabecera-resultados">
+	    	    <div id="cab-dentro-resultados">
+	    	    </div>
+			</div>
+	    	
+	    	<div data-role="content">
+		    	<div class="barraBotones">
+		    		<div id="barra-izq-resultados" class="barra-izq">
+		    			<input id="botAtrasResultados" class="botBarra" type=button data-theme=b data-icon=arrow-l data-iconpos=notext />	    			
+		    		</div>
+		    		<div class="limpiador"></div>	    		
+		    	</div>
+		    
+		    	<ul id="listaResultados" data-role="listview" data-inset="true">
+			        <li id="res-1">  
+			        	<div class="contRes">
+				        	<div id="res-izq-1" class="res-izq"></div>
+				        	<div id="res-dch-1" class="res-dch"></div>
+			        	</div>
+			        </li>
+	    		</ul>
+    		</div>
 	    </div>
 
 		<script src="js/index.js"></script>

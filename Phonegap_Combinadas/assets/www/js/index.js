@@ -106,7 +106,7 @@ $('#listaPage').bind('pagebeforeshow', function(event) {
 
     var elListaNiveles = $('#listaNiveles');
     
-    for ( var i = 1; i < 13; i++) {
+    for ( var i = 1; i < 21; i++) {
     	
     	$("#li-izq-" + i).html( i + ". Maila");
     	
@@ -114,16 +114,13 @@ $('#listaPage').bind('pagebeforeshow', function(event) {
     		$("#li-" + i).attr('tipo', "Biderketak");
     	} else if(i > 4 && i < 9) {
     		$("#li-" + i).attr('tipo', "Zatiketak");
-    	} else {
+    	} else if(i > 8 && i < 14) {
     		$("#li-" + i).attr('tipo', "Parentesiak");
+    	} else {
+    		$("#li-" + i).attr('tipo', "Kortxeteak");
     	}
     	
     	if ( porcentajeNivel[i] != null && porcentajeNivel[i] != 0) {
-	    	/*var porcentaje = parseFloat( (100 - (fallosTotNivel[i] * 100 / subnivelesTotNivel[i])) ).toFixed(2);
-	    	if ( (porcentaje*100) % 100 == 0) { //Si el resultado es entero
-				porcentaje = porcentaje.toString();
-				porcentaje = porcentaje.split(".00").join("");
-			}*/
 			var porcentaje = parseFloat( porcentajeNivel[i] );
 	    	$("#li-ctr-" + i).html( porcentaje + "%");
 	    	if (porcentaje < 80) {
@@ -137,15 +134,25 @@ $('#listaPage').bind('pagebeforeshow', function(event) {
     		$("#li-ctr-" + i).html("&nbsp;&nbsp;&nbsp;&nbsp;");
     	}
     	
-    	if (nivelSuperado[i] == true) {
-    		$("#li-" + i).removeClass("disabled-li");
-    		$("#li-dch-" + i).html("<img src='img/check.png'>");    		
-    	} else if (nivelSuperado[i-1] == true || i == 1) {
-    		$("#li-" + i).removeClass("disabled-li");
-    		$("#li-dch-" + i).html("");
-    	} else {
-    		$("#li-" + i).addClass("disabled-li");
-    		$("#li-dch-" + i).html("<img src='img/lock.png'>");
+    	if (modoJuego == 1) {
+	    	if (nivelSuperado[i] == true) {
+	    		$("#li-" + i).removeClass("disabled-li");
+	    		$("#li-dch-" + i).html("<img src='img/check.png'>");    		
+	    	} else if (nivelSuperado[i-1] == true || i == 1) {
+	    		$("#li-" + i).removeClass("disabled-li");
+	    		$("#li-dch-" + i).html("");
+	    	} else {
+	    		$("#li-" + i).addClass("disabled-li");
+	    		$("#li-dch-" + i).html("<img src='img/lock.png'>");
+	    	}
+    	} else { //modoJuego == 2, por tanto no se desactivan los niveles no superados
+    		if (nivelSuperado[i] == true) {
+	    		$("#li-" + i).removeClass("disabled-li");
+	    		$("#li-dch-" + i).html("<img src='img/check.png'>");    		
+	    	} else {
+	    		$("#li-" + i).removeClass("disabled-li");
+	    		$("#li-dch-" + i).html("");
+	    	}
     	}
     }
     
@@ -194,12 +201,12 @@ $('#estadisticasPage').bind('pagebeforeshow', function(event) {
 	
 	//Estadística 1 (Niveles superados)
 	var superados = parseInt("0");
-	for (var i = 1; i < 13; i++) {
+	for (var i = 1; i < 21; i++) {
 		if ( nivelSuperado[i] == true ) {
 			superados++;
 		}
 	}
-	$("#est-dch-1").html(superados + " / 12");
+	$("#est-dch-1").html(superados + " / 20");
 	
 	//Estadística 2 (Porcentaje de niveles superados sin error)
 	if ( subnivelesTot != null && subnivelesTot != 0) {
@@ -302,14 +309,23 @@ $('#barra-izq-resultados').bind('vclick', function(event) {
 $('#barra-dch-combinadas').bind('vclick', function(event) { 
 	if (subnivelAct == 5) {
 		if (fallosAct < 2) {
-			if (nivelAct == 12) {
+			if (nivelAct == 20) {
+				porcent = (5 - fallosAct) * 20;
+				var textoAlerta = "";
+				if (porcent == 100) {
+					textoAlerta += "<span style='color:green'>";
+				} else {
+					textoAlerta += "<span style='color:orange'>";
+				}
+				textoAlerta += porcent + "%</span>";
+				
 				$("#combinadasPage").simpledialog2({ 
 		        theme: 'b',
 		        mode: 'blank',
 		        animate: false,
 		        blankContent : "<div style='padding:15px;'>" +              
 		            "<h2 style='text-align:center;'>" + 
-		            "<span style='color:purple'>ZORIONAK!<br />Azken maila gainditu duzu!</span>" + 
+		            "<span style='color:green'>ZORIONAK!<br />Azken maila gainditu duzu!</span><br /><br /><span style='color:#3473a6'>Minimo: 75%<br />Lortu duzu: </span>" + textoAlerta +
 		            "</h2>" + 
 		            "<a rel='close' onclick='atras()' data-role='button' href='#'>Onartu</a>" +
 		            "</div>"
@@ -320,10 +336,18 @@ $('#barra-dch-combinadas').bind('vclick', function(event) {
 				fallosAct = 0;
 				subnivelAct = 1;
 				fallosSubnivel = [];
+				actualizarStack();
 				saveVars();
 			} else {
-				alerta("<span style='color:green'>" + nivelAct + ". Maila<br />gainditu duzu!</span>");
 				porcent = (5 - fallosAct) * 20;
+				var textoAlerta = ("<span style='color:green'>" + nivelAct + ". Maila<br />gainditu duzu!</span><br /><br /><span style='color:#3473a6'>Minimo: 75%<br />Lortu duzu: </span>"); 
+				if (porcent == 100) {
+					textoAlerta += "<span style='color:green'>";
+				} else {
+					textoAlerta += "<span style='color:orange'>";
+				}
+				textoAlerta += porcent + "%</span>";
+		        alerta(textoAlerta);
 				if (porcent > porcentajeNivel[nivelAct] || porcentajeNivel[nivelAct] == null) { 
 					porcentajeNivel[nivelAct] = parseFloat(porcent);
 				}
@@ -335,14 +359,15 @@ $('#barra-dch-combinadas').bind('vclick', function(event) {
 			if (porcent > porcentajeNivel[nivelAct]) { 
 				porcentajeNivel[nivelAct] = parseFloat(porcent);
 			}
-			//alerta("<span style='color:red'>Zoritzarrez, " + fallosAct + " akats egin dituzu,<br />eta behin bakarrik huts egin dezakezu.</span>");
 			$("#combinadasPage").simpledialog2({ 
 		        theme: 'b',
 		        mode: 'blank',
 		        animate: false,
 		        blankContent : "<div style='padding:15px;'>" +              
 		            "<h2 style='text-align:center;'>" + 
-		            "<span style='color:red'>Zoritzarrez, " + fallosAct + " akats egin dituzu,<br />eta behin bakarrik huts egin dezakezu.</span>" + 
+		            "<span style='color:red'>Zoritxarrez, ez duzu maila gainditu.<span><br /><br /><span style='color:#3473a6'>Minimo: 75%<br />Lortu duzu: </span><span style='color:red'>" + 
+		            porcent + 
+		            "%</span>" + 
 		            "</h2>" + 
 		            "<a rel='close' onclick='atras()' data-role='button' href='#'>Onartu</a>" +
 		            "</div>"
@@ -370,11 +395,6 @@ $('#divResultado').bind('vclick', function(event) {
 	}
 });
 
-/*$('#botNueva').bind('vclick', function(event) { 
-	reset();
-	getOperacion();
-});*/
-
 $("#inputResultado").bind("keyup", function(event) { 
 	if ($("#inputResultado").val() != "") {
 		$("#botResultado").button('enable');
@@ -387,28 +407,48 @@ $('#botResultado').bind('vclick', function(event) {
 	if ($("#inputResultado").val() == resString) {
 		if (subnivelAct == 5) {
 			if (fallosAct < 2) {
-				if (nivelAct == 12) {
+				if (nivelAct == 20) {
+					porcent = (5 - fallosAct) * 20;
+					var textoAlerta = "";
+					if (porcent == 100) {
+						textoAlerta += "<span style='color:green'>";
+					} else {
+						textoAlerta += "<span style='color:orange'>";
+					}
+					textoAlerta += porcent + "%</span>";
+					
 					$("#combinadasPage").simpledialog2({ 
 			        theme: 'b',
 			        mode: 'blank',
 			        animate: false,
 			        blankContent : "<div style='padding:15px;'>" +              
 			            "<h2 style='text-align:center;'>" + 
-			            "Emaitza zuzena!<br /><br /><span style='color:purple'>ZORIONAK!<br />Azken maila gainditu duzu!</span>" + 
+			            "<span style='color:green'>Emaitza zuzena!<br /><br />ZORIONAK!<br />Azken maila gainditu duzu!</span><br /><br /><span style='color:#3473a6'>Minimo: 75%<br />Lortu duzu: </span>" + textoAlerta + 
 			            "</h2>" + 
 			            "<a rel='close' onclick='atras()' data-role='button' href='#'>Onartu</a>" +
 			            "</div>"
 				    });		
+				    if (porcent > porcentajeNivel[nivelAct] || porcentajeNivel[nivelAct] == null) { 
+						porcentajeNivel[nivelAct] = parseFloat(porcent);
+					}
 					nivelSuperado[nivelAct] = true;
 					subnivelesTot++;
 					subnivelesTotNivel[nivelAct]++;
 					fallosAct = 0;
 					subnivelAct = 1;
 					fallosSubnivel = [];
+					actualizarStack();
 					saveVars();
 				} else {
-					alerta("Emaitza zuzena!<br /><br /><span style='color:green'>" + nivelAct + ". Maila<br />gainditu duzu!</span>");
 					porcent = (5 - fallosAct) * 20;
+					var textoAlerta = ("<span style='color:green'>" + nivelAct + ". Maila<br />gainditu duzu!</span><br /><br /><span style='color:#3473a6'>Minimo: 75%<br />Lortu duzu: </span>"); 
+					if (porcent == 100) {
+						textoAlerta += "<span style='color:green'>";
+					} else {
+						textoAlerta += "<span style='color:orange'>";
+					}
+					textoAlerta += porcent + "%</span>";
+			        alerta(textoAlerta);
 					if (porcent > porcentajeNivel[nivelAct] || porcentajeNivel[nivelAct] == null) { 
 						porcentajeNivel[nivelAct] = parseFloat(porcent);
 					}
@@ -420,15 +460,15 @@ $('#botResultado').bind('vclick', function(event) {
 				if (porcent > porcentajeNivel[nivelAct]) { 
 					porcentajeNivel[nivelAct] = parseFloat(porcent);
 				}
-				//alerta("Emaitza zuzena!<br /><br /><span style='color:red'>Zoritzarrez, " + fallosAct + " akats egin dituzu,<br />eta behin bakarrik huts egin dezakezu.</span>");
 				$("#combinadasPage").simpledialog2({ 
 			        theme: 'b',
 			        mode: 'blank',
 			        animate: false,
 			        blankContent : "<div style='padding:15px;'>" +              
 			            "<h2 style='text-align:center;'>" + 
-			            "Emaitza zuzena!<br /><br /><span style='color:red'>Zoritzarrez, " + fallosAct + " akats egin dituzu,<br />eta behin bakarrik huts egin dezakezu.</span>" + 
-			            "</h2>" + 
+			            "Emaitza zuzena!<br /><br /><span style='color:red'>Zoritxarrez, ez duzu maila gainditu.<span><br /><br /><span style='color:#3473a6'>Minimo: 75%<br />Lortu duzu: </span><span style='color:red'>" +
+			            porcent + 
+			            "%</span></h2>" + 
 			            "<a rel='close' onclick='atras()' data-role='button' href='#'>Onartu</a>" +
 			            "</div>"
 			    });
@@ -595,7 +635,7 @@ function cargarVariables(){
 			
 		case 9: 
 			longMax = 3;
-			modoCD = false;
+			modoCD = true;
 			modoCP = true;
 			modoCC = false;
 			limMin = -30;
@@ -604,7 +644,7 @@ function cargarVariables(){
 			
 		case 10: 
 			longMax = 4;
-			modoCD = false;
+			modoCD = true;
 			modoCP = true;
 			modoCC = false;
 			limMin = -30;
@@ -613,7 +653,7 @@ function cargarVariables(){
 			
 		case 11: 
 			longMax = 5;
-			modoCD = false;
+			modoCD = true;
 			modoCP = true;
 			modoCC = false;
 			limMin = -30;
@@ -622,11 +662,83 @@ function cargarVariables(){
 			
 		case 12: 
 			longMax = 6;
-			modoCD = false;
+			modoCD = true;
 			modoCP = true;
 			modoCC = false;
 			limMin = -30;
 			limMax = 50;
+			break;
+			
+		case 13: 
+			longMax = 7;
+			modoCD = true;
+			modoCP = true;
+			modoCC = false;
+			limMin = -40;
+			limMax = 60;
+			break;
+			
+		case 14: 
+			longMax = 4;
+			modoCD = true;
+			modoCP = true;
+			modoCC = true;
+			limMin = -40;
+			limMax = 50;
+			break;
+			
+		case 15: 
+			longMax = 5;
+			modoCD = true;
+			modoCP = true;
+			modoCC = true;
+			limMin = -50;
+			limMax = 60;
+			break;
+			
+		case 16: 
+			longMax = 6;
+			modoCD = true;
+			modoCP = true;
+			modoCC = true;
+			limMin = -50;
+			limMax = 60;
+			break;
+			
+		case 17: 
+			longMax = 7;
+			modoCD = true;
+			modoCP = true;
+			modoCC = true;
+			limMin = -50;
+			limMax = 70;
+			break;
+			
+		case 18: 
+			longMax = 8;
+			modoCD = true;
+			modoCP = true;
+			modoCC = true;
+			limMin = -50;
+			limMax = 70;
+			break;
+			
+		case 19: 
+			longMax = 9;
+			modoCD = true;
+			modoCP = true;
+			modoCC = true;
+			limMin = -60;
+			limMax = 70;
+			break;
+			
+		case 20: 
+			longMax = 10;
+			modoCD = true;
+			modoCP = true;
+			modoCC = true;
+			limMin = -100;
+			limMax = 100;
 			break;
 	}
 }

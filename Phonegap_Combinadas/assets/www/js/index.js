@@ -45,8 +45,12 @@ var fallosSubnivel = []; //True o False para cada subnivel. Hace que no se cuent
 var falloModo2 = false; //Controla si hay error en el modo 2 para mostrar el botón a la siguiente cuenta
 var porcent = parseInt("0"); //Guarda el último porcentaje obtenido (para poder recogerlo desde resultadosPage)
 var porcentajeNivel = []; //De donde salen las estadísticas. Solo se guarda si es mayor que el valor previo
-var meses=["Urt","Ots","Mar","Api","Mai","Eka","Uzt","Abu","Ira","Urr","Aza","Abe"];
-var stackFecha = []; //Guarda en una posición del 1 al 25 la fecha del último nivel jugado (para resultadosPage)
+var hilabeteak = ["Urt","Ots","Mar","Api","Mai","Eka","Uzt","Abu","Ira","Urr","Aza","Abe"];
+var meses = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+//var stackFecha = []; //Guarda en una posición del 1 al 25 la fecha del último nivel jugado (para resultadosPage)
+var stackMes = []; //Guarda en una posición del 1 al 25 el mes del último nivel jugado (para resultadosPage)
+var stackDia = []; //Guarda en una posición del 1 al 25 el día del último nivel jugado (para resultadosPage)
 var stackNiv = []; //Guarda en una posición del 1 al 25 el último nivel jugado (para resultadosPage)
 var stackPorc = []; //Guarda en una posición del 1 al 25 el porcentaje de acierto del último nivel jugado (para resultadosPage)
 
@@ -64,35 +68,32 @@ $('#inicioPage').bind('pagebeforeshow', function(event) {
 
 	loadVars();
 
-    if (idioma == null) {
-        idioma = "EU";
-    }
-    /*$.getScript( "js/lang." + idioma + ".js", function( data, textStatus, jqxhr ) {
-    });*/
-
-    if ($.mobile.sdCurrentDialog != null) {
+	//Cierra un dialog por si se ha cambiado de página sin cerrarlo
+	if ($.mobile.sdCurrentDialog != null) {
         $.mobile.sdCurrentDialog.close();
     }
-    
     //Inicializa las variables para no dar valores nulos cuando deberían ser 0
 	if (subnivelesTot == null) {
 		subnivelesTot = parseInt("0");
 	}
 	if (fallosTot == null) {
 		fallosTot = parseInt("0");
-	}	
+	}
+    if (idioma == null) {
+        idioma = "EU";
+    }
+    $('input[name="radio"]').filter('[value=' + idioma + ']').attr('checked', true).checkboxradio("refresh");
     
-    $('input[name="radio"]').filter('[value=' + idioma + ']').attr('checked', true).checkboxradio("refresh");;
-    
-    $('#botModo1').siblings('.ui-btn-inner').children('.ui-btn-text').text("Maila guztiak");
-    //$('#botModo1').siblings('.ui-btn-inner').children('.ui-btn-text').text(lang.greeting);
-    $('#botModo2').siblings('.ui-btn-inner').children('.ui-btn-text').text("Maila bat bakarrik");
-    $('#botEstadisticas').siblings('.ui-btn-inner').children('.ui-btn-text').text("Estatistikak");
-    $('#botResultados').siblings('.ui-btn-inner').children('.ui-btn-text').text("Azken emaitzak");
-    
-    $('#tituloJolastu').html("JOLASTU");
-    $('#tituloIdioma').html("HIZKUNTZA");
-    alert("comienzo");
+    $.getScript( "js/lang." + idioma + ".js", function( data, textStatus, jqxhr ) {
+	    $('#botModo1').siblings('.ui-btn-inner').children('.ui-btn-text').text(lang.mailaGuztiak);
+	    $('#botModo2').siblings('.ui-btn-inner').children('.ui-btn-text').text(lang.mailaBat);
+	    $('#botEstadisticas').siblings('.ui-btn-inner').children('.ui-btn-text').text(lang.estatistikak);
+	    $('#botResultados').siblings('.ui-btn-inner').children('.ui-btn-text').text(lang.azkenEmaitzak);
+	    
+	    $('#tituloJolastu').html(lang.jolastu);
+	    $('#tituloIdioma').html(lang.hizkuntza);
+    });
+
 });
 
 $('#listaPage').bind('pagebeforeshow', function(event) {
@@ -102,25 +103,31 @@ $('#listaPage').bind('pagebeforeshow', function(event) {
     }
 
 	if (modoJuego == 1) {
-		$("#cab-dentro-lista").html("MAILA GUZTIAK");
+		$("#cab-dentro-lista").html(lang.mailaGuztiakMay);
 	} else {
-		$("#cab-dentro-lista").html("MAILA BAT BAKARRIK");
+		$("#cab-dentro-lista").html(lang.mailaBatMay);
 	}
 
     var elListaNiveles = $('#listaNiveles');
     
     for ( var i = 1; i < 21; i++) {
-    	
-    	$("#li-izq-" + i).html( i + ". Maila");
-    	
-    	if (i < 5) {
-    		$("#li-" + i).attr('tipo', "Biderketak");
-    	} else if(i > 4 && i < 9) {
-    		$("#li-" + i).attr('tipo', "Zatiketak");
-    	} else if(i > 8 && i < 14) {
-    		$("#li-" + i).attr('tipo', "Parentesiak");
+    	//HARDCODEO DE IDIOMA
+		if (idioma == "EU") {
+			$("#li-izq-" + i).html( i + ". Maila" );
+		} else if (idioma == "ES") {
+			$("#li-izq-" + i).html( "Nivel " + i );
     	} else {
-    		$("#li-" + i).attr('tipo', "Kortxeteak");
+			$("#li-izq-" + i).html( "Level " + i );
+		}
+		
+    	if (i < 5) {
+    		$("#li-" + i).attr('tipo', lang.biderketak);
+    	} else if(i > 4 && i < 9) {
+    		$("#li-" + i).attr('tipo', lang.zatiketak);
+    	} else if(i > 8 && i < 14) {
+    		$("#li-" + i).attr('tipo', lang.parentesiak);
+    	} else {
+    		$("#li-" + i).attr('tipo', lang.kortxeteak);
     	}
     	
     	if ( porcentajeNivel[i] != null && porcentajeNivel[i] != 0) {
@@ -184,8 +191,8 @@ $('#combinadasPage').bind('pagebeforeshow', function(event) {
 	$("#botResultado").button('disable');
 	$('#barra-dch-combinadas').css("visibility", "hidden");
 	
-	$("#inputPruebas").attr("placeholder", "Egin hemen zure probak");
-	$("#inputResultado").attr("placeholder", "Emaitza");
+	$("#inputPruebas").attr("placeholder", lang.eginHemen);
+	$("#inputResultado").attr("placeholder", lang.emaitza);
 });
 
 $('#combinadasPage').bind('pageshow', function(event) {
@@ -193,14 +200,14 @@ $('#combinadasPage').bind('pageshow', function(event) {
 });
 
 $('#estadisticasPage').bind('pagebeforeshow', function(event) {
-	$("#cab-dentro-estadisticas").html("ESTATISTIKAK");
+	$("#cab-dentro-estadisticas").html(lang.estatistikakMay);
 	
-	$("#est-izq-1").html("Gainditutako mailak");
-	$("#est-izq-2").html("Akatsik gabe gainditutako eragiketen portzentaila");
-	$("#est-izq-3").html("Totalean gainditutako eragiketak");
-	$("#est-izq-4").html("Totalezko akatsak");
+	$("#est-izq-1").html(lang.gainditutako);
+	$("#est-izq-2").html(lang.akatsikGabe);
+	$("#est-izq-3").html(lang.totalean);
+	$("#est-izq-4").html(lang.totalezko);
 	
-	$('#botBorrarEst').siblings('.ui-btn-inner').children('.ui-btn-text').text("Ezabatu");
+	$('#botBorrarEst').siblings('.ui-btn-inner').children('.ui-btn-text').text(lang.ezabatu);
 	
 	//Estadística 1 (Niveles superados)
 	var superados = parseInt("0");
@@ -237,15 +244,15 @@ $('#estadisticasPage').bind('pagebeforeshow', function(event) {
 
 $('#resultadosPage').bind('pagebeforeshow', function(event) {
 
-	$("#cab-dentro-resultados").html("AZKEN EMAITZAK");
+	$("#cab-dentro-resultados").html(lang.azkenEmaitzakMay);
 
 	var listResultados = "";
     $('#listaResultados li').remove();
     
     listResultados+= "<li data-role=list-divider>" +
 	    	"<div class='contRes'>" +
-	        	"<div class='res-izq'><span style='color:white;font-weight:bold'>Data<span></div>" +
-	        	"<div class='res-ctr'><span style='color:white;font-weight:bold'>Maila<span></div>" +
+	        	"<div class='res-izq'><span style='color:white;font-weight:bold'>" + lang.data + "<span></div>" +
+	        	"<div class='res-ctr'><span style='color:white;font-weight:bold'>" + lang.maila + "<span></div>" +
 	        	"<div class='res-dch'><span style='color:white;font-weight:bold'>%<span></div>" +
 	    	"</div>" +
 	    "</li>";
@@ -253,16 +260,30 @@ $('#resultadosPage').bind('pagebeforeshow', function(event) {
     for ( var i = 1; i < stackNiv.length; i++) {
 		listResultados +=
 			"<li id='res-" + i +"'>" +
-	        	"<div class='contRes'>" +
-	        		"<div id='res-izq-" + i + "' class='res-izq'>" + stackFecha[i] + "</div>" +
-		        	"<div id='res-ctr-" + i + "' class='res-ctr'>" + stackNiv[i] + "</div>" +
-		        	"<div id='res-dch-" + i + "' class='res-dch'>" + stackPorc[i] + "%</div>" +
-	        	"</div>" +
+	        	"<div class='contRes'>";
+	    //HARDCODEO DE IDIOMA
+	    if (idioma == "EU") {
+	    	listResultados += "<div id='res-izq-" + i + "' class='res-izq'>" + hilabeteak[ stackMes[i] ] + "/" + stackDia[i] + "</div>";
+	    } else if (idioma == "ES") {
+	    	listResultados += "<div id='res-izq-" + i + "' class='res-izq'>" + stackDia[i]+ "/" + meses[ stackMes[i] ] + "</div>";
+	    } else {
+	    	listResultados += "<div id='res-izq-" + i + "' class='res-izq'>" + months[ stackMes[i] ] + "/" + stackDia[i] + "</div>";
+	    }
+	        		
+		listResultados += "<div id='res-ctr-" + i + "' class='res-ctr'>" + stackNiv[i] + "</div>";
+		
+		if (stackPorc[i] < 50) {
+			listResultados += "<div id='res-dch-" + i + "' class='res-dch'><span style='color:red'>" + stackPorc[i] + "%</span></div>";
+		} else if (stackPorc[i] >= 50 && stackPorc[i] < 90) {
+			listResultados += "<div id='res-dch-" + i + "' class='res-dch'><span style='color:orange'>" + stackPorc[i] + "%</span></div>";
+		} else {
+			listResultados += "<div id='res-dch-" + i + "' class='res-dch'><span style='color:green'>" + stackPorc[i] + "%</span></div>";
+		}   	
+		
+	    listResultados +=  "</div>" +
 	        "</li>";
     }
-	
 	$('#listaResultados').append(listResultados).listview('refresh');
-
 });
 
 
@@ -291,9 +312,14 @@ $('#botResultados').bind('vclick', function(event) {
 $('#radioIdioma').bind('change', function(event) {
     if ( idioma != $('input[name=radio]:checked').val() ) {
         idioma = $('input[name=radio]:checked').val();
-        $.getScript( "js/lang." + idioma + ".js", function( data, textStatus, jqxhr ) {
-            //alert(lang.greeting + " " + idioma);
-            $.mobile.changePage($("#inicioPage"));
+        $.getScript( "js/lang." + idioma + ".js", function( data, textStatus, jqxhr ) { 
+            $('#botModo1').siblings('.ui-btn-inner').children('.ui-btn-text').text(lang.mailaGuztiak);
+		    $('#botModo2').siblings('.ui-btn-inner').children('.ui-btn-text').text(lang.mailaBat);
+		    $('#botEstadisticas').siblings('.ui-btn-inner').children('.ui-btn-text').text(lang.estatistikak);
+		    $('#botResultados').siblings('.ui-btn-inner').children('.ui-btn-text').text(lang.azkenEmaitzak);
+		    
+		    $('#tituloJolastu').html(lang.jolastu);
+		    $('#tituloIdioma').html(lang.hizkuntza);
         });
     }    
     saveVars();
@@ -334,9 +360,9 @@ $('#barra-dch-combinadas').bind('vclick', function(event) {
 		        animate: false,
 		        blankContent : "<div style='padding:15px;'>" +              
 		            "<h2 style='text-align:center;'>" + 
-		            "<span style='color:green'>ZORIONAK!<br />Azken maila gainditu duzu!</span><br /><br /><span style='color:#3473a6'>Minimo: 75%<br />Lortu duzu: </span>" + textoAlerta +
+		            "<span style='color:green'>" + lang.zorionak + "<br />" + lang.azkenMaila + "</span><br /><br /><span style='color:#3473a6'>" + lang.minimo + ": 75%<br />" + lang.lortuDuzu + ": </span>" + textoAlerta +
 		            "</h2>" + 
-		            "<a rel='close' onclick='atras()' data-role='button' href='#'>Onartu</a>" +
+		            "<a rel='close' onclick='atras()' data-role='button' href='#'>" + lang.onartu + "</a>" +
 		            "</div>"
 			    });		
 				nivelSuperado[nivelAct] = true;
@@ -349,7 +375,15 @@ $('#barra-dch-combinadas').bind('vclick', function(event) {
 				saveVars();
 			} else {
 				porcent = (5 - fallosAct) * 20;
-				var textoAlerta = ("<span style='color:green'>" + nivelAct + ". Maila<br />gainditu duzu!</span><br /><br /><span style='color:#3473a6'>Minimo: 75%<br />Lortu duzu: </span>"); 
+			//HARDCODEO DE IDIOMA
+				if (idioma == "EU") {
+					var textoAlerta = ("<span style='color:green'>" + nivelAct + ". Maila<br />gainditu duzu!</span><br /><br /><span style='color:#3473a6'>" + lang.minimo + ": 75%<br />" + lang.lortuDuzu + ": </span>"); 
+				} else if (idioma == "ES") {
+					var textoAlerta = ("<span style='color:green'>¡Has superado<br />el nivel " + nivelAct + "!</span><br /><br /><span style='color:#3473a6'>" + lang.minimo + ": 75%<br />" + lang.lortuDuzu + ": </span>"); 
+				} else {
+					var textoAlerta = ("<span style='color:green'>You have beaten<br />level " + nivelAct + "!</span><br /><br /><span style='color:#3473a6'>" + lang.minimo + ": 75%<br />" + lang.lortuDuzu + ": </span>"); 
+				}	
+				
 				if (porcent == 100) {
 					textoAlerta += "<span style='color:green'>";
 				} else {
@@ -374,7 +408,7 @@ $('#barra-dch-combinadas').bind('vclick', function(event) {
 		        animate: false,
 		        blankContent : "<div style='padding:15px;'>" +              
 		            "<h2 style='text-align:center;'>" + 
-		            "<span style='color:red'>Zoritxarrez, ez duzu maila gainditu.<span><br /><br /><span style='color:#3473a6'>Minimo: 75%<br />Lortu duzu: </span><span style='color:red'>" + 
+		            "<span style='color:red'>" + lang.zoritxarrez + "<span><br /><br /><span style='color:#3473a6'>" + lang.minimo + ": 75%<br />" + lang.lortuDuzu + ": </span><span style='color:red'>" + 
 		            porcent + 
 		            "%</span>" + 
 		            "</h2>" + 
@@ -432,7 +466,7 @@ $('#botResultado').bind('vclick', function(event) {
 			        animate: false,
 			        blankContent : "<div style='padding:15px;'>" +              
 			            "<h2 style='text-align:center;'>" + 
-			            "<span style='color:green'>Emaitza zuzena!<br /><br />ZORIONAK!<br />Azken maila gainditu duzu!</span><br /><br /><span style='color:#3473a6'>Minimo: 75%<br />Lortu duzu: </span>" + textoAlerta + 
+			            "<span style='color:green'>" + lang.emaitzaZuzena + "<br /><br />" + lang.zorionak + "<br />" + lang.azkenMaila + "</span><br /><br /><span style='color:#3473a6'>" + lang.minimo + ": 75%<br />" + lang.lortuDuzu + ": </span>" + textoAlerta + 
 			            "</h2>" + 
 			            "<a rel='close' onclick='atras()' data-role='button' href='#'>Onartu</a>" +
 			            "</div>"
@@ -450,7 +484,15 @@ $('#botResultado').bind('vclick', function(event) {
 					saveVars();
 				} else {
 					porcent = (5 - fallosAct) * 20;
-					var textoAlerta = ("<span style='color:green'>" + nivelAct + ". Maila<br />gainditu duzu!</span><br /><br /><span style='color:#3473a6'>Minimo: 75%<br />Lortu duzu: </span>"); 
+				//HARDCODEO DE IDIOMA
+					if (idioma == "EU") {
+						var textoAlerta = ("<span style='color:green'>" + lang.emaitzaZuzena + "<br /><br/>" + nivelAct + ". maila<br />gainditu duzu!</span><br /><br /><span style='color:#3473a6'>" + lang.minimo + ": 75%<br />" + lang.lortuDuzu + ": </span>"); 
+					} else if (idioma == "ES") {
+						var textoAlerta = ("<span style='color:green'>" + lang.emaitzaZuzena + "<br /><br/>¡Has superado<br />el nivel " + nivelAct + "!</span><br /><br /><span style='color:#3473a6'>" + lang.minimo + ": 75%<br />" + lang.lortuDuzu + ": </span>"); 
+					} else {
+						var textoAlerta = ("<span style='color:green'>" + lang.emaitzaZuzena + "<br /><br/>You have beaten<br />level " + nivelAct + "!</span><br /><br /><span style='color:#3473a6'>" + lang.minimo + ": 75%<br />" + lang.lortuDuzu + ": </span>"); 
+					}
+
 					if (porcent == 100) {
 						textoAlerta += "<span style='color:green'>";
 					} else {
@@ -475,10 +517,10 @@ $('#botResultado').bind('vclick', function(event) {
 			        animate: false,
 			        blankContent : "<div style='padding:15px;'>" +              
 			            "<h2 style='text-align:center;'>" + 
-			            "Emaitza zuzena!<br /><br /><span style='color:red'>Zoritxarrez, ez duzu maila gainditu.<span><br /><br /><span style='color:#3473a6'>Minimo: 75%<br />Lortu duzu: </span><span style='color:red'>" +
+			            lang.emaitzaZuzena + "<br /><br /><span style='color:red'>" + lang.zoritxarrez + "<span><br /><br /><span style='color:#3473a6'>" + lang.minimo + ": 75%<br />" + lang.lortuDuzu + ": </span><span style='color:red'>" +
 			            porcent + 
 			            "%</span></h2>" + 
-			            "<a rel='close' onclick='atras()' data-role='button' href='#'>Onartu</a>" +
+			            "<a rel='close' onclick='atras()' data-role='button' href='#'>" + lang.onartu + "</a>" +
 			            "</div>"
 			    });
 			    actualizarStack();
@@ -490,7 +532,7 @@ $('#botResultado').bind('vclick', function(event) {
 				saveVars();
 			}			
 		} else {
-			alerta("Emaitza zuzena!");
+			alerta(lang.emaitzaZuzena);
 			proxSubnivel();
 		}
 	} else {
@@ -504,17 +546,19 @@ $('#botResultado').bind('vclick', function(event) {
 			saveVars();
 			$('#barra-dch-combinadas').css("visibility", "visible");
 		}
-		alerta("<span style='color:red'>Emaitza ez da zuzena, <br />saiatu berriro.<span>");
+		alerta("<span style='color:red'>" + lang.emaitzaEzZuzena + ",<br />" + lang.saiatuBerriro + ".<span>");
 	}
 });
 
 $('#botBorrarEst').bind('vclick', function(event) { 
+	var ok = lang.bai;
+	var cancel = lang.ez;
 	$('<div>').simpledialog2({
 	    mode: 'button',
 	    animate: false,
-	    buttonPrompt: "<span style='color:red'>Ziur zaude estatistika guztiak ezabatu nahi dituzula? <br />Aurrerapen guztiak galduko dituzu.<span>",
+	    buttonPrompt: "<span style='color:red'>" + lang.ziurZaude + "<br />" + lang.aurrerapenGuztiak + ".<span>",
 	    buttons : {
-	        'Bai': {
+	        "OK": {
 		        click: function () { 
 		            nivelSuperado = [];
 		            nivelSuperado[0] = false;
@@ -526,14 +570,16 @@ $('#botBorrarEst').bind('vclick', function(event) {
 					porcentajeNivel = [];
 					stackNiv = [];
 					stackPorc = [];
-					stackFecha = [];
+					//stackFecha = [];
+					stackMes = [];
+					stackDia = [];
 					$("#est-dch-2").html(""); //Deja en blanco la segunda estadística, que por algún motivo no pierde su valor.
 					saveVars();
 					atras();
 		        },
 		    icon: ""
 	        },
-	        'Ez': {
+	        "CANCEL": {
 		        click: function () { 
 		            $('#buttonoutput').text('Cancel');
 		        },
@@ -754,16 +800,16 @@ function cargarVariables(){
 
 function actualizarMarcador(){
 	if (modoJuego == 1) {
-		$("#cab-izq").html("Maila: " + nivelAct + " - " + subnivelAct);
+		$("#cab-izq").html(lang.maila + ": " + nivelAct + " - " + subnivelAct);
 	} else {
-		$("#cab-izq").html("Maila: " + nivelAct + " - n");
+		$("#cab-izq").html(lang.maila + ": " + nivelAct + " - n");
 	}
 	if (fallosAct == 0) {
-		$("#cab-dch").html("Akatsak: " + fallosAct);
+		$("#cab-dch").html(lang.akatsak + ": " + fallosAct);
 	} else if (fallosAct == 1) {
-		$("#cab-dch").html("Akatsak: <span style='color:orange'>" + fallosAct + "</span>");
+		$("#cab-dch").html(lang.akatsak + ": <span style='color:orange'>" + fallosAct + "</span>");
 	} else {
-		$("#cab-dch").html("Akatsak: <span style='color:red'>" + fallosAct + "</span>");
+		$("#cab-dch").html(lang.akatsak + ": <span style='color:red'>" + fallosAct + "</span>");
 	}
 }
 
@@ -799,7 +845,7 @@ function alerta(mensaje) {
         animate: false,
         blankContent : "<div style='padding:15px;'>" +              
             "<h2 style='text-align:center;'>" + mensaje + "</h2>" + 
-            "<a rel='close' onclick='butDisable()' data-role='button' href='#'>Onartu</a>" +
+            "<a rel='close' onclick='butDisable()' data-role='button' href='#'>" + lang.onartu + "</a>" +
             "</div>"
     });
 }
@@ -818,8 +864,8 @@ function actualizarStack() {
 	var lim;
 	
 	var dateObj = new Date();
-	var month = dateObj.getUTCMonth(); 
-	var day = dateObj.getUTCDate();
+	/*var month = dateObj.getUTCMonth(); 
+	var day = dateObj.getUTCDate();*/
 	
 	if (stackNiv.length > 25) {
 		lim = 25;
@@ -828,11 +874,15 @@ function actualizarStack() {
 	}
 	
 	for (var i = lim; i > 1; i--) {
-		stackFecha[i] = stackFecha[i-1];
+		//stackFecha[i] = stackFecha[i-1];
+		stackMes[i] = stackMes[i-1];
+		stackDia[i] = stackDia[i-1];
 		stackNiv[i] = stackNiv[i-1];
 		stackPorc[i] = stackPorc[i-1];
 	}
-	stackFecha[1] = meses[month] + " / " + day;
+	//stackFecha[1] = meses[month] + " / " + day;
+	stackMes[1] = dateObj.getUTCMonth();
+	stackDia[1] = dateObj.getUTCDate();
 	stackNiv[1] = nivelAct;
 	stackPorc[1] = porcent;
 }
@@ -845,7 +895,9 @@ function saveVars() {
 	localStorage["subnivelesTotNivel"] = JSON.stringify(subnivelesTotNivel);
 	localStorage["fallosTotNivel"] = JSON.stringify(fallosTotNivel);
 	localStorage["porcentajeNivel"] = JSON.stringify(porcentajeNivel);
-	localStorage["stackFecha"] = JSON.stringify(stackFecha);
+	//localStorage["stackFecha"] = JSON.stringify(stackFecha);
+	localStorage["stackMes"] = JSON.stringify(stackMes);
+	localStorage["stackDia"] = JSON.stringify(stackDia);
 	localStorage["stackNiv"] = JSON.stringify(stackNiv);
 	localStorage["stackPorc"] = JSON.stringify(stackPorc);
 }
@@ -866,8 +918,14 @@ function loadVars() {
 	if (localStorage["porcentajeNivel"] != null) {
 		porcentajeNivel = JSON.parse(localStorage["porcentajeNivel"]);
 	}
-	if (localStorage["stackFecha"] != null) {
+	/*if (localStorage["stackFecha"] != null) {
 		stackFecha = JSON.parse(localStorage["stackFecha"]);
+	}*/
+	if (localStorage["stackMes"] != null) {
+		stackMes = JSON.parse(localStorage["stackMes"]);
+	}
+	if (localStorage["stackDia"] != null) {
+		stackDia = JSON.parse(localStorage["stackDia"]);
 	}
 	if (localStorage["stackNiv"] != null) {
 		stackNiv = JSON.parse(localStorage["stackNiv"]);

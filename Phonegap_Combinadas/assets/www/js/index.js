@@ -360,7 +360,7 @@ $('#barra-dch-combinadas').bind('vclick', function(event) {
 		        animate: false,
 		        blankContent : "<div style='padding:15px;'>" +              
 		            "<h2 style='text-align:center;'>" + 
-		            "<span style='color:green'>" + lang.zorionak + "<br />" + lang.azkenMaila + "</span><br /><br /><span style='color:#3473a6'>" + lang.minimo + ": 75%<br />" + lang.lortuDuzu + ": </span>" + textoAlerta +
+		            "<span style='color:green'>" + lang.zorionak + "<br /><br />" + lang.azkenMaila + "</span><br /><br /><span style='color:#3473a6'>" + lang.minimo + ": 75%<br />" + lang.lortuDuzu + ": </span>" + textoAlerta +
 		            "</h2>" + 
 		            "<a rel='close' onclick='atras()' data-role='button' href='#'>" + lang.onartu + "</a>" +
 		            "</div>"
@@ -412,7 +412,7 @@ $('#barra-dch-combinadas').bind('vclick', function(event) {
 		            porcent + 
 		            "%</span>" + 
 		            "</h2>" + 
-		            "<a rel='close' onclick='atras()' data-role='button' href='#'>Onartu</a>" +
+		            "<a rel='close' onclick='atras()' data-role='button' href='#'>" + lang.onartu + "</a>" +
 		            "</div>"
 		    });
 		    actualizarStack();
@@ -429,14 +429,14 @@ $('#barra-dch-combinadas').bind('vclick', function(event) {
 	butDisable();
 });
 
-$('#divResultado').bind('vclick', function(event) { 
+/*$('#divResultado').bind('vclick', function(event) { 
 	var resObj = $('#boxResultado');
 	if ( resObj.css("visibility") == "hidden" ) {
 		resObj.css("visibility", "visible");
 	} else {
 		resObj.css("visibility", "hidden");
 	}
-});
+});*/
 
 $("#inputResultado").bind("keyup", function(event) { 
 	if ($("#inputResultado").val() != "") {
@@ -466,9 +466,9 @@ $('#botResultado').bind('vclick', function(event) {
 			        animate: false,
 			        blankContent : "<div style='padding:15px;'>" +              
 			            "<h2 style='text-align:center;'>" + 
-			            "<span style='color:green'>" + lang.emaitzaZuzena + "<br /><br />" + lang.zorionak + "<br />" + lang.azkenMaila + "</span><br /><br /><span style='color:#3473a6'>" + lang.minimo + ": 75%<br />" + lang.lortuDuzu + ": </span>" + textoAlerta + 
+			            "<span style='color:green'>" + lang.emaitzaZuzena + "<br /><br />" + lang.zorionak + "<br /><br />" + lang.azkenMaila + "</span><br /><br /><span style='color:#3473a6'>" + lang.minimo + ": 75%<br />" + lang.lortuDuzu + ": </span>" + textoAlerta + 
 			            "</h2>" + 
-			            "<a rel='close' onclick='atras()' data-role='button' href='#'>Onartu</a>" +
+			            "<a rel='close' onclick='atras()' data-role='button' href='#'>" + lang.onartu + "</a>" +
 			            "</div>"
 				    });		
 				    if (porcent > porcentajeNivel[nivelAct] || porcentajeNivel[nivelAct] == null) { 

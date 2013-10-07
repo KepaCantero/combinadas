@@ -97,7 +97,7 @@ $('#inicioPage').bind('pagebeforeshow', function(event) {
 
 });
 
-$('#listaPage').bind('pageshow', function(event) {
+$('#listaPage').bind('pagebeforeshow', function(event) {
 
     if ($.mobile.sdCurrentDialog != null) {
         $.mobile.sdCurrentDialog.close();
@@ -187,7 +187,7 @@ $('#listaPage').bind('pageshow', function(event) {
     }).listview('refresh');
 });
 
-$('#combinadasPage').bind('pageshow', function(event) {
+$('#combinadasPage').bind('pagebeforeshow', function(event) {
 	$('#inputPruebas').elastic();
 	$("#botResultado").button('disable');
 	$('#barra-dch-combinadas').css("visibility", "hidden");
@@ -196,11 +196,11 @@ $('#combinadasPage').bind('pageshow', function(event) {
 	$("#inputResultado").attr("placeholder", lang.emaitza);
 });
 
-$('#combinadasPage').bind('pageshow', function(event) {
+$('#combinadasPage').bind('pagebeforeshow', function(event) {
 	mostrarNivel();
 });
 
-$('#estadisticasPage').bind('pageshow', function(event) {
+$('#estadisticasPage').bind('pagebeforeshow', function(event) {
 	$("#cab-dentro-estadisticas").html(lang.estatistikakMay);
 	
 	$("#est-izq-1").html(lang.gainditutako);
@@ -249,7 +249,7 @@ $('#estadisticasPage').bind('pageshow', function(event) {
 	$("#est-dch-4").html(fallosTot);
 });
 
-$('#resultadosPage').bind('pageshow', function(event) {
+$('#resultadosPage').bind('pagebeforeshow', function(event) {
 
 	$("#cab-dentro-resultados").html(lang.azkenEmaitzakMay);
 
@@ -436,14 +436,14 @@ $('#barra-dch-combinadas').bind('vclick', function(event) {
 	butDisable();
 });
 
-$('#divResultado').bind('vclick', function(event) { 
+/*$('#divResultado').bind('vclick', function(event) { 
 	var resObj = $('#boxResultado');
 	if ( resObj.css("visibility") == "hidden" ) {
 		resObj.css("visibility", "visible");
 	} else {
 		resObj.css("visibility", "hidden");
 	}
-});
+});*/
 
 $("#inputResultado").bind("keyup", function(event) { 
 	if ($("#inputResultado").val() != "") {
@@ -894,7 +894,7 @@ function butDisable() {
 function actualizarStack() {
 	var lim;
 	
-	var d = new Date();
+	var dateObj = new Date();
 	//var dateObj = d.getTime() + (d.getTimezoneOffset() * 60000);
 	
 	if (stackNiv.length > 25) {

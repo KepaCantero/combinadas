@@ -36,6 +36,7 @@ var modoJuego = parseInt("0"); // Si es 1, se juegan los niveles seguidos; si es
 var nivelAct = parseInt("1");  //Nivel actual
 var nivelSuperado = []; //Si un nivel determinado ha sido o no superado
 var subnivelAct = parseInt("1"); //Subnivel actual (del 1 al 10)
+var subnivelMax = parseInt("0"); //Número de subniveles del nivel actual
 var subnivelesTot = parseInt("0"); //Subniveles jugados en total (para las estadísticas)
 var subnivelesTotNivel = []; //Subniveles totales jugados en este nivel (para las estadísticas)
 var fallosAct = parseInt("0"); //Fallos cometidos en los subniveles de este nivel
@@ -96,7 +97,7 @@ $('#inicioPage').bind('pagebeforeshow', function(event) {
 
 });
 
-$('#listaPage').bind('pagebeforeshow', function(event) {
+$('#listaPage').bind('pageshow', function(event) {
 
     if ($.mobile.sdCurrentDialog != null) {
         $.mobile.sdCurrentDialog.close();
@@ -186,7 +187,7 @@ $('#listaPage').bind('pagebeforeshow', function(event) {
     }).listview('refresh');
 });
 
-$('#combinadasPage').bind('pagebeforeshow', function(event) {
+$('#combinadasPage').bind('pageshow', function(event) {
 	$('#inputPruebas').elastic();
 	$("#botResultado").button('disable');
 	$('#barra-dch-combinadas').css("visibility", "hidden");
@@ -199,7 +200,7 @@ $('#combinadasPage').bind('pageshow', function(event) {
 	mostrarNivel();
 });
 
-$('#estadisticasPage').bind('pagebeforeshow', function(event) {
+$('#estadisticasPage').bind('pageshow', function(event) {
 	$("#cab-dentro-estadisticas").html(lang.estatistikakMay);
 	
 	$("#est-izq-1").html(lang.gainditutako);
@@ -216,7 +217,13 @@ $('#estadisticasPage').bind('pagebeforeshow', function(event) {
 			superados++;
 		}
 	}
-	$("#est-dch-1").html(superados + " / 20");
+	
+	//HARDCODEO DE IDIOMA
+	if (idioma == "EU") {
+	    $("#est-dch-1").html("20 / " + superados);
+	} else {
+		$("#est-dch-1").html(superados + " / 20");
+	}
 	
 	//Estadística 2 (Porcentaje de niveles superados sin error)
 	if ( subnivelesTot != null && subnivelesTot != 0) {
@@ -242,7 +249,7 @@ $('#estadisticasPage').bind('pagebeforeshow', function(event) {
 	$("#est-dch-4").html(fallosTot);
 });
 
-$('#resultadosPage').bind('pagebeforeshow', function(event) {
+$('#resultadosPage').bind('pageshow', function(event) {
 
 	$("#cab-dentro-resultados").html(lang.azkenEmaitzakMay);
 
@@ -272,9 +279,9 @@ $('#resultadosPage').bind('pagebeforeshow', function(event) {
 	        		
 		listResultados += "<div id='res-ctr-" + i + "' class='res-ctr'>" + stackNiv[i] + "</div>";
 		
-		if (stackPorc[i] < 50) {
+		if (stackPorc[i] < 75) {
 			listResultados += "<div id='res-dch-" + i + "' class='res-dch'><span style='color:red'>" + stackPorc[i] + "%</span></div>";
-		} else if (stackPorc[i] >= 50 && stackPorc[i] < 90) {
+		} else if (stackPorc[i] >= 75 && stackPorc[i] < 90) {
 			listResultados += "<div id='res-dch-" + i + "' class='res-dch'><span style='color:orange'>" + stackPorc[i] + "%</span></div>";
 		} else {
 			listResultados += "<div id='res-dch-" + i + "' class='res-dch'><span style='color:green'>" + stackPorc[i] + "%</span></div>";
@@ -342,7 +349,7 @@ $('#barra-izq-resultados').bind('vclick', function(event) {
 });
 
 $('#barra-dch-combinadas').bind('vclick', function(event) { 
-	if (subnivelAct == 5) {
+	if (subnivelAct == subnivelMax) {
 		if (fallosAct < 2) {
 			if (nivelAct == 20) {
 				porcent = (5 - fallosAct) * 20;
@@ -429,14 +436,14 @@ $('#barra-dch-combinadas').bind('vclick', function(event) {
 	butDisable();
 });
 
-/*$('#divResultado').bind('vclick', function(event) { 
+$('#divResultado').bind('vclick', function(event) { 
 	var resObj = $('#boxResultado');
 	if ( resObj.css("visibility") == "hidden" ) {
 		resObj.css("visibility", "visible");
 	} else {
 		resObj.css("visibility", "hidden");
 	}
-});*/
+});
 
 $("#inputResultado").bind("keyup", function(event) { 
 	if ($("#inputResultado").val() != "") {
@@ -448,7 +455,7 @@ $("#inputResultado").bind("keyup", function(event) {
 
 $('#botResultado').bind('vclick', function(event) { 
 	if ($("#inputResultado").val() == resString) {
-		if (subnivelAct == 5) {
+		if (subnivelAct == subnivelMax) {
 			if (fallosAct < 2) {
 				if (nivelAct == 20) {
 					porcent = (5 - fallosAct) * 20;
@@ -623,6 +630,7 @@ function cargarVariables(){
 			modoCC = false;
 			limMin = 0;
 			limMax = 30;
+			subnivelMax = 10;
 			break;
 			
 		case 2: 
@@ -632,6 +640,7 @@ function cargarVariables(){
 			modoCC = false;
 			limMin = 0;
 			limMax = 40;
+			subnivelMax = 10;
 			break;
 		
 		case 3: 
@@ -641,6 +650,7 @@ function cargarVariables(){
 			modoCC = false;
 			limMin = 0;
 			limMax = 50;
+			subnivelMax = 8;
 			break;
 			
 		case 4: 
@@ -650,6 +660,7 @@ function cargarVariables(){
 			modoCC = false;
 			limMin = 0;
 			limMax = 50;
+			subnivelMax = 8;
 			break;
 			
 		case 5: 
@@ -659,6 +670,7 @@ function cargarVariables(){
 			modoCC = false;
 			limMin = 0;
 			limMax = 30;
+			subnivelMax = 10;
 			break;
 			
 		case 6: 
@@ -668,6 +680,7 @@ function cargarVariables(){
 			modoCC = false;
 			limMin = 0;
 			limMax = 40;
+			subnivelMax = 10;
 			break;
 			
 		case 7: 
@@ -677,6 +690,7 @@ function cargarVariables(){
 			modoCC = false;
 			limMin = 0;
 			limMax = 50;
+			subnivelMax = 8;
 			break;
 			
 		case 8: 
@@ -686,6 +700,7 @@ function cargarVariables(){
 			modoCC = false;
 			limMin = 0;
 			limMax = 50;
+			subnivelMax = 8;
 			break;
 			
 		case 9: 
@@ -695,6 +710,7 @@ function cargarVariables(){
 			modoCC = false;
 			limMin = -30;
 			limMax = 30;
+			subnivelMax = 8;
 			break;
 			
 		case 10: 
@@ -704,6 +720,7 @@ function cargarVariables(){
 			modoCC = false;
 			limMin = -30;
 			limMax = 40;
+			subnivelMax = 7;
 			break;
 			
 		case 11: 
@@ -713,6 +730,7 @@ function cargarVariables(){
 			modoCC = false;
 			limMin = -30;
 			limMax = 50;
+			subnivelMax = 6;
 			break;
 			
 		case 12: 
@@ -722,6 +740,7 @@ function cargarVariables(){
 			modoCC = false;
 			limMin = -30;
 			limMax = 50;
+			subnivelMax = 5;
 			break;
 			
 		case 13: 
@@ -731,6 +750,7 @@ function cargarVariables(){
 			modoCC = false;
 			limMin = -40;
 			limMax = 60;
+			subnivelMax = 6;
 			break;
 			
 		case 14: 
@@ -740,6 +760,7 @@ function cargarVariables(){
 			modoCC = true;
 			limMin = -40;
 			limMax = 50;
+			subnivelMax = 6;
 			break;
 			
 		case 15: 
@@ -749,6 +770,7 @@ function cargarVariables(){
 			modoCC = true;
 			limMin = -50;
 			limMax = 60;
+			subnivelMax = 6;
 			break;
 			
 		case 16: 
@@ -758,6 +780,7 @@ function cargarVariables(){
 			modoCC = true;
 			limMin = -50;
 			limMax = 60;
+			subnivelMax = 5;
 			break;
 			
 		case 17: 
@@ -767,6 +790,7 @@ function cargarVariables(){
 			modoCC = true;
 			limMin = -50;
 			limMax = 70;
+			subnivelMax = 4;
 			break;
 			
 		case 18: 
@@ -776,6 +800,7 @@ function cargarVariables(){
 			modoCC = true;
 			limMin = -50;
 			limMax = 70;
+			subnivelMax = 4;
 			break;
 			
 		case 19: 
@@ -785,6 +810,7 @@ function cargarVariables(){
 			modoCC = true;
 			limMin = -60;
 			limMax = 70;
+			subnivelMax = 3;
 			break;
 			
 		case 20: 
@@ -794,13 +820,18 @@ function cargarVariables(){
 			modoCC = true;
 			limMin = -100;
 			limMax = 100;
+			subnivelMax = 3;
 			break;
 	}
 }
 
 function actualizarMarcador(){
 	if (modoJuego == 1) {
-		$("#cab-izq").html(lang.maila + ": " + nivelAct + " - " + subnivelAct);
+		if (idioma == "EU") {
+			$("#cab-izq").html(lang.maila + ": " + nivelAct + " - " + subnivelMax + "/" + subnivelAct);
+		} else {
+			$("#cab-izq").html(lang.maila + ": " + nivelAct + " - " + subnivelAct + "/" + subnivelMax);
+		}
 	} else {
 		$("#cab-izq").html(lang.maila + ": " + nivelAct + " - n");
 	}
@@ -815,7 +846,7 @@ function actualizarMarcador(){
 
 function proxSubnivel(){
 	if (modoJuego == 1) {
-		if (subnivelAct < 5) {
+		if (subnivelAct < subnivelMax) {
 			subnivelesTot++;
 			subnivelesTotNivel[nivelAct]++;
 			subnivelAct++;
@@ -863,9 +894,8 @@ function butDisable() {
 function actualizarStack() {
 	var lim;
 	
-	var dateObj = new Date();
-	/*var month = dateObj.getUTCMonth(); 
-	var day = dateObj.getUTCDate();*/
+	var d = new Date();
+	//var dateObj = d.getTime() + (d.getTimezoneOffset() * 60000);
 	
 	if (stackNiv.length > 25) {
 		lim = 25;
@@ -880,7 +910,6 @@ function actualizarStack() {
 		stackNiv[i] = stackNiv[i-1];
 		stackPorc[i] = stackPorc[i-1];
 	}
-	//stackFecha[1] = meses[month] + " / " + day;
 	stackMes[1] = dateObj.getUTCMonth();
 	stackDia[1] = dateObj.getUTCDate();
 	stackNiv[1] = nivelAct;

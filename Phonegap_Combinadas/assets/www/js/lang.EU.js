@@ -24,7 +24,7 @@ lang = {
 	maila: "Maila",
 	zorionak : "ZORIONAK!",
 	azkenMaila : "Azken maila gainditu duzu!",
-	minimo : "Minimo",
+	minimo : "Gutxienez",
 	lortuDuzu : "Lortu duzu",
 	onartu : "Onartu",
 	zoritxarrez : "Zoritxarrez, ez duzu maila gainditu.",

@@ -837,7 +837,7 @@ function actualizarMarcador(){
 	}
 	if (fallosAct == 0) {
 		$("#cab-dch").html(lang.akatsak + ": " + fallosAct);
-	} else if (fallosAct == 1) {
+	} else if ( fallosAct < subnivelMax/4 ) {
 		$("#cab-dch").html(lang.akatsak + ": <span style='color:orange'>" + fallosAct + "</span>");
 	} else {
 		$("#cab-dch").html(lang.akatsak + ": <span style='color:red'>" + fallosAct + "</span>");

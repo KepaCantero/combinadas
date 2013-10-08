@@ -134,9 +134,9 @@ $('#listaPage').bind('pagebeforeshow', function(event) {
     	if ( porcentajeNivel[i] != null && porcentajeNivel[i] != 0) {
 			var porcentaje = parseFloat( porcentajeNivel[i] );
 	    	$("#li-ctr-" + i).html( porcentaje + "%");
-	    	if (porcentaje < 80) {
+	    	if (porcentaje < 75) {
 	    		$("#li-ctr-" + i).css("color", "red");
-	    	} else if (porcentaje >= 80 && porcentaje < 100) {
+	    	} else if (porcentaje >= 75 && porcentaje < 100) {
 	    		$("#li-ctr-" + i).css("color", "orange");
 	    	} else {
 	    		$("#li-ctr-" + i).css("color", "green");
@@ -281,7 +281,7 @@ $('#resultadosPage').bind('pagebeforeshow', function(event) {
 		
 		if (stackPorc[i] < 75) {
 			listResultados += "<div id='res-dch-" + i + "' class='res-dch'><span style='color:red'>" + stackPorc[i] + "%</span></div>";
-		} else if (stackPorc[i] >= 75 && stackPorc[i] < 90) {
+		} else if (stackPorc[i] >= 75 && stackPorc[i] < 100) {
 			listResultados += "<div id='res-dch-" + i + "' class='res-dch'><span style='color:orange'>" + stackPorc[i] + "%</span></div>";
 		} else {
 			listResultados += "<div id='res-dch-" + i + "' class='res-dch'><span style='color:green'>" + stackPorc[i] + "%</span></div>";
@@ -350,9 +350,9 @@ $('#barra-izq-resultados').bind('vclick', function(event) {
 
 $('#barra-dch-combinadas').bind('vclick', function(event) { 
 	if (subnivelAct == subnivelMax) {
-		if (fallosAct < 2) {
+		if (fallosAct <= subnivelMax/4) {
 			if (nivelAct == 20) {
-				porcent = (5 - fallosAct) * 20;
+				porcent = 100 - (fallosAct*100/subnivelMax);
 				var textoAlerta = "";
 				if (porcent == 100) {
 					textoAlerta += "<span style='color:green'>";
@@ -381,7 +381,7 @@ $('#barra-dch-combinadas').bind('vclick', function(event) {
 				actualizarStack();
 				saveVars();
 			} else {
-				porcent = (5 - fallosAct) * 20;
+				porcent = 100 - (fallosAct*100/subnivelMax);
 			//HARDCODEO DE IDIOMA
 				if (idioma == "EU") {
 					var textoAlerta = ("<span style='color:green'>" + nivelAct + ". Maila<br />gainditu duzu!</span><br /><br /><span style='color:#3473a6'>" + lang.minimo + ": 75%<br />" + lang.lortuDuzu + ": </span>"); 
@@ -405,7 +405,7 @@ $('#barra-dch-combinadas').bind('vclick', function(event) {
 				proxSubnivel();
 			}
 		} else { //Aquí se ha fallado más de lo permitido. No se va a proxSubnivel(), sino que las variables se resetean y se sale a la lista
-			porcent = (5 - fallosAct) * 20;
+			porcent = 100 - (fallosAct*100/subnivelMax);
 			if (porcent > porcentajeNivel[nivelAct]) { 
 				porcentajeNivel[nivelAct] = parseFloat(porcent);
 			}
@@ -436,14 +436,14 @@ $('#barra-dch-combinadas').bind('vclick', function(event) {
 	butDisable();
 });
 
-/*$('#divResultado').bind('vclick', function(event) { 
+$('#divResultado').bind('vclick', function(event) { 
 	var resObj = $('#boxResultado');
 	if ( resObj.css("visibility") == "hidden" ) {
 		resObj.css("visibility", "visible");
 	} else {
 		resObj.css("visibility", "hidden");
 	}
-});*/
+});
 
 $("#inputResultado").bind("keyup", function(event) { 
 	if ($("#inputResultado").val() != "") {
@@ -456,9 +456,9 @@ $("#inputResultado").bind("keyup", function(event) {
 $('#botResultado').bind('vclick', function(event) { 
 	if ($("#inputResultado").val() == resString) {
 		if (subnivelAct == subnivelMax) {
-			if (fallosAct < 2) {
+			if (fallosAct <= subnivelMax/4) {
 				if (nivelAct == 20) {
-					porcent = (5 - fallosAct) * 20;
+					porcent = 100 - (fallosAct*100/subnivelMax);
 					var textoAlerta = "";
 					if (porcent == 100) {
 						textoAlerta += "<span style='color:green'>";
@@ -490,7 +490,7 @@ $('#botResultado').bind('vclick', function(event) {
 					actualizarStack();
 					saveVars();
 				} else {
-					porcent = (5 - fallosAct) * 20;
+					porcent = 100 - (fallosAct*100/subnivelMax);
 				//HARDCODEO DE IDIOMA
 					if (idioma == "EU") {
 						var textoAlerta = ("<span style='color:green'>" + lang.emaitzaZuzena + "<br /><br/>" + nivelAct + ". maila<br />gainditu duzu!</span><br /><br /><span style='color:#3473a6'>" + lang.minimo + ": 75%<br />" + lang.lortuDuzu + ": </span>"); 
@@ -514,7 +514,7 @@ $('#botResultado').bind('vclick', function(event) {
 					proxSubnivel();
 				}
 			} else { //Aquí se ha fallado más de lo permitido. No se va a proxSubnivel(), sino que las variables se resetean y se sale a la lista
-				porcent = (5 - fallosAct) * 20;
+				porcent = 100 - (fallosAct*100/subnivelMax);
 				if (porcent > porcentajeNivel[nivelAct]) { 
 					porcentajeNivel[nivelAct] = parseFloat(porcent);
 				}
@@ -837,7 +837,7 @@ function actualizarMarcador(){
 	}
 	if (fallosAct == 0) {
 		$("#cab-dch").html(lang.akatsak + ": " + fallosAct);
-	} else if ( fallosAct < subnivelMax/4 ) {
+	} else if ( fallosAct <= subnivelMax/4 ) {
 		$("#cab-dch").html(lang.akatsak + ": <span style='color:orange'>" + fallosAct + "</span>");
 	} else {
 		$("#cab-dch").html(lang.akatsak + ": <span style='color:red'>" + fallosAct + "</span>");

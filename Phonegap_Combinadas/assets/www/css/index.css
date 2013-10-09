@@ -189,10 +189,11 @@ body {
 	background-image:-ms-linear-gradient(#5698c8,#336fab);
 	background-image:-o-linear-gradient(#5698c8,#336fab);
 	background-image:linear-gradient(#5698c8,#336fab);
+	overflow: hidden;
 }
 
 #cab-izq{
-	width: 46%;
+	width: 51%;
 	margin-left: 4%;
 	font-family: "customfont";
 	font-size: 1.6em;
@@ -202,10 +203,11 @@ body {
 	text-align: left;
 	float: left;
 	margin-bottom: -2%;
+	overflow: inherit;
 }
 
 #cab-dch{
-	width: 46%;
+	width: 41%;
 	margin-right: 4%;
 	font-family: "customfont";
 	font-size: 1.6em;
@@ -215,6 +217,7 @@ body {
 	text-align: right;
 	float: left;
 	margin-bottom: -2%;
+	overflow: inherit;
 }
 
 #boxOperacion{

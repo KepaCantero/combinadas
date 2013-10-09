@@ -6,8 +6,8 @@ var resString = ""; //String que contiene el resultado limpio
 var longMax = parseInt("0"); //Cantidad de números en la operación
 var longAct = parseInt("0"); //Números ya introducidos
 
-var limMin = parseInt("0");
-var limMax = parseInt("0");
+var limMin = parseInt("0"); //Límite inferior permitido para el resultado
+var limMax = parseInt("0"); //Límite superior permitido para el resultado
 
 var corchAb = false; //Si un corchete ha sido abierto y no cerrado
 var corchIni = false; //Si un corchete se ha abierto al principio
@@ -352,7 +352,12 @@ $('#barra-dch-combinadas').bind('vclick', function(event) {
 	if (subnivelAct == subnivelMax) {
 		if (fallosAct <= subnivelMax/4) {
 			if (nivelAct == 20) {
-				porcent = 100 - (fallosAct*100/subnivelMax);
+				porcent = parseFloat( 100 - (fallosAct*100/subnivelMax) ).toFixed(2);
+				if ( (porcent*100) % 100 == 0) { //Si el resultado es entero
+					var porcentaje = porcent.toString();
+					porcentaje = porcentaje.split(".00").join("");
+					porcent = parseFloat(porcentaje);
+				}
 				var textoAlerta = "";
 				if (porcent == 100) {
 					textoAlerta += "<span style='color:green'>";
@@ -381,7 +386,12 @@ $('#barra-dch-combinadas').bind('vclick', function(event) {
 				actualizarStack();
 				saveVars();
 			} else {
-				porcent = 100 - (fallosAct*100/subnivelMax);
+				porcent = parseFloat( 100 - (fallosAct*100/subnivelMax) ).toFixed(2);
+				if ( (porcent*100) % 100 == 0) { //Si el resultado es entero
+					var porcentaje = porcent.toString();
+					porcentaje = porcentaje.split(".00").join("");
+					porcent = parseFloat(porcentaje);
+				}
 			//HARDCODEO DE IDIOMA
 				if (idioma == "EU") {
 					var textoAlerta = ("<span style='color:green'>" + nivelAct + ". Maila<br />gainditu duzu!</span><br /><br /><span style='color:#3473a6'>" + lang.minimo + ": 75%<br />" + lang.lortuDuzu + ": </span>"); 
@@ -405,7 +415,12 @@ $('#barra-dch-combinadas').bind('vclick', function(event) {
 				proxSubnivel();
 			}
 		} else { //Aquí se ha fallado más de lo permitido. No se va a proxSubnivel(), sino que las variables se resetean y se sale a la lista
-			porcent = 100 - (fallosAct*100/subnivelMax);
+			porcent = parseFloat( 100 - (fallosAct*100/subnivelMax) ).toFixed(2);
+			if ( (porcent*100) % 100 == 0) { //Si el resultado es entero
+				var porcentaje = porcent.toString();
+				porcentaje = porcentaje.split(".00").join("");
+				porcent = parseFloat(porcentaje);
+			}
 			if (porcent > porcentajeNivel[nivelAct]) { 
 				porcentajeNivel[nivelAct] = parseFloat(porcent);
 			}
@@ -458,7 +473,12 @@ $('#botResultado').bind('vclick', function(event) {
 		if (subnivelAct == subnivelMax) {
 			if (fallosAct <= subnivelMax/4) {
 				if (nivelAct == 20) {
-					porcent = 100 - (fallosAct*100/subnivelMax);
+					porcent = parseFloat( 100 - (fallosAct*100/subnivelMax) ).toFixed(2);
+					if ( (porcent*100) % 100 == 0) { //Si el resultado es entero
+						var porcentaje = porcent.toString();
+						porcentaje = porcentaje.split(".00").join("");
+						porcent = parseFloat(porcentaje);
+					}
 					var textoAlerta = "";
 					if (porcent == 100) {
 						textoAlerta += "<span style='color:green'>";
@@ -490,7 +510,12 @@ $('#botResultado').bind('vclick', function(event) {
 					actualizarStack();
 					saveVars();
 				} else {
-					porcent = 100 - (fallosAct*100/subnivelMax);
+					porcent = parseFloat( 100 - (fallosAct*100/subnivelMax) ).toFixed(2);
+					if ( (porcent*100) % 100 == 0) { //Si el resultado es entero
+						var porcentaje = porcent.toString();
+						porcentaje = porcentaje.split(".00").join("");
+						porcent = parseFloat(porcentaje);
+					}
 				//HARDCODEO DE IDIOMA
 					if (idioma == "EU") {
 						var textoAlerta = ("<span style='color:green'>" + lang.emaitzaZuzena + "<br /><br/>" + nivelAct + ". maila<br />gainditu duzu!</span><br /><br /><span style='color:#3473a6'>" + lang.minimo + ": 75%<br />" + lang.lortuDuzu + ": </span>"); 
@@ -514,7 +539,12 @@ $('#botResultado').bind('vclick', function(event) {
 					proxSubnivel();
 				}
 			} else { //Aquí se ha fallado más de lo permitido. No se va a proxSubnivel(), sino que las variables se resetean y se sale a la lista
-				porcent = 100 - (fallosAct*100/subnivelMax);
+				porcent = parseFloat( 100 - (fallosAct*100/subnivelMax) ).toFixed(2);
+				if ( (porcent*100) % 100 == 0) { //Si el resultado es entero
+					var porcentaje = porcent.toString();
+					porcentaje = porcentaje.split(".00").join("");
+					porcent = parseFloat(porcentaje);
+				}
 				if (porcent > porcentajeNivel[nivelAct]) { 
 					porcentajeNivel[nivelAct] = parseFloat(porcent);
 				}

@@ -48,7 +48,7 @@
 	    	</div>
 	    </div>
 	    
-	    <div id="listaPage" data-role="page"> <!--data-add-back-btn=true data-back-btn-text=" "-->
+	    <div id="listaPage" data-role="page">
 			
 			<div id="cabecera-lista">
 	    	    <div id="cab-dentro-lista">
@@ -238,16 +238,12 @@
 				</div>
 				
 				<div id="boxInputResultado">
-					<input id="inputResultado" type="number" value="" />
+					<input id="inputResultado" type="number" maxlength="4" onKeyDown="limitInput()" value="" />
 				</div>
 				
 				<div class="boxBoton">
                     <input id="botResultado" data-theme=b type="button" value="OK">
-                </div> 
-                
-                <!--<div class="boxBoton">
-                    <input id="botNueva" data-theme=e type="button" value="Berria">
-                </div>-->    
+                </div>  
                                             
 			</div>
 		</div>
@@ -308,7 +304,7 @@
 	    	
 	    </div>
 
-		<div id="resultadosPage" data-role="page"> <!--data-add-back-btn=true data-back-btn-text=" "-->
+		<div id="resultadosPage" data-role="page">
 			
 			<div id="cabecera-resultados">
 	    	    <div id="cab-dentro-resultados">

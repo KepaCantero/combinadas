@@ -451,14 +451,14 @@ $('#barra-dch-combinadas').bind('vclick', function(event) {
 	butDisable();
 });
 
-$('#divResultado').bind('vclick', function(event) { 
+/*$('#divResultado').bind('vclick', function(event) { 
 	var resObj = $('#boxResultado');
 	if ( resObj.css("visibility") == "hidden" ) {
 		resObj.css("visibility", "visible");
 	} else {
 		resObj.css("visibility", "hidden");
 	}
-});
+});*/
 
 $("#inputResultado").bind("keyup", function(event) { 
 	if ($("#inputResultado").val() != "") {
@@ -626,6 +626,19 @@ $('#botBorrarEst').bind('vclick', function(event) {
 	    }
 	});
 });
+
+//Esta función limita los caracteres que pueden introducirse en el input del resultado
+function limitInput() { 
+	var e = event || window.event; 
+	var key = e.keyCode || e.which; 
+	//if (key < 48 || key > 57) //Si no es un número
+	if (key != 8 && key != 189) { //Si no es la tecla retroceder o guion
+		if (key < 48 || key > 57) { //Si no es un número
+			if (e.preventDefault) e.preventDefault(); //navegadores normales 
+			e.returnValue = false; //IE
+		} 
+	}
+}
 
 /////////////////////
 //GESTIÓN DEL JUEGO//

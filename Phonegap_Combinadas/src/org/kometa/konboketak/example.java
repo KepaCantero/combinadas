@@ -1,9 +1,9 @@
-package org.apache.cordova.example;
+package org.kometa.konboketak;
 
 import android.os.Bundle;
-import android.view.WindowManager;
 
 import org.apache.cordova.*;
+import org.kometa.konboketak.R;
 
 
 public class example extends DroidGap

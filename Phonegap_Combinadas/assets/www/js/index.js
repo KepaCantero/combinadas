@@ -451,14 +451,14 @@ $('#barra-dch-combinadas').bind('vclick', function(event) {
 	butDisable();
 });
 
-/*$('#divResultado').bind('vclick', function(event) { 
+$('#divResultado').bind('vclick', function(event) { 
 	var resObj = $('#boxResultado');
 	if ( resObj.css("visibility") == "hidden" ) {
 		resObj.css("visibility", "visible");
 	} else {
 		resObj.css("visibility", "hidden");
 	}
-});*/
+});
 
 $("#inputResultado").bind("keyup", function(event) { 
 	if ($("#inputResultado").val() != "") {
@@ -1062,6 +1062,7 @@ function getOperacion(){
 	
 	//Esto es común para todos los modos
 	var operacionLimpia = operacion.split("*").join("x");	
+	var operacionLimpia = operacionLimpia.split("/").join(":");
 	$("#boxOperacion").html(operacionLimpia);
 	
 	//Esto cambia los corchetes por paréntesis para evitar errores al calcular el resultado
@@ -1074,6 +1075,7 @@ function getOperacion(){
 	} else if ( (resultado*100) % 100 == 0) { //Si el resultado es entero
 		resString = resultado.toString();
 		resString = resString.split(".00").join(""); //Esto quita los decimales en caso de que el resultado sea entero
+		if (resString == "-0") resString = "0";
 		$("#boxResultado").html(resString);
 	} else {
 		reset();
@@ -1421,7 +1423,7 @@ function ultimoCaracterSC(){
 }
 
 function getNum() {
-	var numero = Math.ceil(Math.random()*9);
+	var numero = Math.ceil(Math.random()*8) + 1; //Produce un entero del 1 al 8
 	return (numero + " ");
 }
 

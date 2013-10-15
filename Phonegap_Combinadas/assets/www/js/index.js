@@ -619,7 +619,7 @@ $('#botBorrarEst').bind('vclick', function(event) {
 });
 
 //Esta función limita los caracteres que pueden introducirse en el input del resultado
-function limitInput() { 
+/*function limitInput() { 
 	var e = event || window.event; 
 	var key = e.keyCode || e.which; 
 	//if (key < 48 || key > 57) //Si no es un número
@@ -629,7 +629,7 @@ function limitInput() {
 			e.returnValue = false; //IE
 		} 
 	}
-}
+}*/
 
 /////////////////////
 //GESTIÓN DEL JUEGO//

@@ -451,15 +451,6 @@ $('#barra-dch-combinadas').bind('vclick', function(event) {
 	butDisable();
 });
 
-$('#divResultado').bind('vclick', function(event) { 
-	var resObj = $('#boxResultado');
-	if ( resObj.css("visibility") == "hidden" ) {
-		resObj.css("visibility", "visible");
-	} else {
-		resObj.css("visibility", "hidden");
-	}
-});
-
 $("#inputResultado").bind("keyup", function(event) { 
 	if ($("#inputResultado").val() != "") {
 		$("#botResultado").button('enable');

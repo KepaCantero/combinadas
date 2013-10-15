@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:windowSoftInputMode="adjustPan"
-      package="org.kometa.konboketak" android:versionName="1.12" android:versionCode="4" android:hardwareAccelerated="true">
+      package="org.kometa.konboketak" android:versionName="1.2" android:versionCode="6" android:hardwareAccelerated="true">
     <supports-screens
         android:largeScreens="true"
         android:normalScreens="true"
@@ -30,5 +30,5 @@
         </activity>
     </application>
 
-    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="18"/>
+    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="17"/>
 </manifest> 

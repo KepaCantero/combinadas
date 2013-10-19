@@ -773,7 +773,7 @@ function cargarVariables(){
 			
 		case 9: 
 			longMax = 3;
-			modoCD = true;
+			modoCD = false;
 			modoCP = true;
 			modoCC = false;
 			limMin = -30;
@@ -783,7 +783,7 @@ function cargarVariables(){
 			
 		case 10: 
 			longMax = 4;
-			modoCD = true;
+			modoCD = false;
 			modoCP = true;
 			modoCC = false;
 			limMin = -30;
@@ -793,7 +793,7 @@ function cargarVariables(){
 			
 		case 11: 
 			longMax = 5;
-			modoCD = true;
+			modoCD = false;
 			modoCP = true;
 			modoCC = false;
 			limMin = -30;
@@ -818,12 +818,12 @@ function cargarVariables(){
 			modoCC = false;
 			limMin = -40;
 			limMax = 60;
-			subnivelMax = 6;
+			subnivelMax = 5;
 			break;
 			
 		case 14: 
 			longMax = 4;
-			modoCD = true;
+			modoCD = false;
 			modoCP = true;
 			modoCC = true;
 			limMin = -40;
@@ -833,7 +833,7 @@ function cargarVariables(){
 			
 		case 15: 
 			longMax = 5;
-			modoCD = true;
+			modoCD = false;
 			modoCP = true;
 			modoCC = true;
 			limMin = -50;
@@ -843,7 +843,7 @@ function cargarVariables(){
 			
 		case 16: 
 			longMax = 6;
-			modoCD = true;
+			modoCD = false;
 			modoCP = true;
 			modoCC = true;
 			limMin = -50;
@@ -1097,7 +1097,7 @@ function getOperacion(){
 	if (resultado < limMin || resultado > limMax) { //Comprueba que el resultado esté dentro de los límites del nivel
 		reset();
 		getOperacion();
-	} else if ( (resultado*100) % 100 == 0) { //Si el resultado es entero
+	} else if ( (resultado*100000000) % 100000000 == 0) { //Si el resultado es entero
 		resString = resultado.toString();
 		resString = resString.split(".00").join(""); //Esto quita los decimales en caso de que el resultado sea entero
 		if (resString == "-0") resString = "0";

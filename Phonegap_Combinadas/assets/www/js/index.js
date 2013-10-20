@@ -1093,11 +1093,12 @@ function getOperacion(){
 	//Esto cambia los corchetes por paréntesis para evitar errores al calcular el resultado
 	operacionSC = operacion.split("]").join(")").split("[").join("(");
 	
-	var resultado = parseFloat(eval(operacionSC)).toFixed(2);
+	var resultado = parseFloat(eval(operacionSC));
 	if (resultado < limMin || resultado > limMax) { //Comprueba que el resultado esté dentro de los límites del nivel
 		reset();
 		getOperacion();
-	} else if ( (resultado*100000000) % 100000000 == 0) { //Si el resultado es entero
+	} else if ( (resultado*100) % 100 == 0) { //Si el resultado es entero
+		resultado = resultado.toFixed(2);
 		resString = resultado.toString();
 		resString = resString.split(".00").join(""); //Esto quita los decimales en caso de que el resultado sea entero
 		if (resString == "-0") resString = "0";
